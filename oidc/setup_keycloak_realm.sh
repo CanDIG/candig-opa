@@ -37,3 +37,11 @@ echo $PERMISSIONS_ID
 
 echo "# Client config follows..."
 ${KC_PATH}/kcadm.sh get clients/${PERMISSIONS_ID}/installation/providers/keycloak-oidc-keycloak-json -r ${REALM}
+
+echo "# Creating user1"
+${KC_PATH}/add-user-keycloak.sh -r ${REALM} -u ${USER1} -p ${USER1PWD}
+
+echo "# Creating user2"
+${KC_PATH}/add-user-keycloak.sh -r ${REALM} -u ${USER2} -p ${USER2PWD}
+
+echo "# Now restart"

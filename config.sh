@@ -2,7 +2,8 @@
 set -euo pipefail
 
 readonly ADMIN=kcadmin ADMINPWD=admin
-readonly USER=user1 USERPWD=pass1
+readonly USER1=user1 USER1PWD=pass1
+readonly USER2=user2 USER2PWD=pass2
 readonly REALM=mockrealm
 readonly CLIENT_LOGIN_ID=mock_login_client
 readonly CLIENT_LOGIN_SECRET=mock_login_secret
