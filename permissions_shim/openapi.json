@@ -1,0 +1,126 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Permissions Server",
+    "version": "1.0",
+    "description": "An API to a permissions server",
+    "contact": {
+      "name": "CanDIG",
+      "url": "https://www.distributedgenomics.ca",
+      "email": "info@distributedgenomics.ca"
+    },
+    "license": {
+      "name": "GPL"
+    }
+  },
+  "host": "localhost",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "auth_token": {
+      "name": "auth_token",
+      "type": "apiKey",
+      "in": "header"
+    }
+  },
+  "tags": [
+    {
+      "name": "Todos"
+    }
+  ],
+  "paths": {
+    "/permissions": {
+      "parameters": [],
+      "get": {
+        "operationId": "GET_permissions",
+        "summary": "Get Permissions",
+        "tags": [
+          "Todos"
+        ],
+        "responses": {
+          "200": {
+            "description": "Datasets for which permission is granted",
+            "schema": {
+              "type": "array",
+              "description": "Allowed datasets",
+              "items": {
+                "type": "string"
+              }
+            },
+            "examples": {
+              "application/json": {
+                "datasets": [
+                  "dataset1",
+                  "dataset3"
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - no client secret provided",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "\"No client secret provided\"": {}
+            }
+          },
+          "403": {
+            "description": "Forbidden - no client secret provided",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "No client secret provided": {}
+            }
+          },
+          "500": {
+            "schema": {
+              "type": "string"
+            },
+            "description": "Internal Error",
+            "examples": {
+              "Internal Error": {}
+            }
+          }
+        },
+        "description": "Return datasets for which permission for the given operation and user is granted.  Requires a valid access token in the header",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "client_secret": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "apikey": []
+    }
+  ]
+}

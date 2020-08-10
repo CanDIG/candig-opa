@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly ADMIN=kcadmin ADMINPWD=admin
+readonly USER=user1 USERPWD=pass1
+readonly REALM=mockrealm
+readonly CLIENT_LOGIN_ID=mock_login_client
+readonly CLIENT_LOGIN_SECRET=mock_login_secret
+readonly CLIENT_PERMISSIONS_ID=mock_permissions_client
+readonly CLIENT_PERMISSIONS_SECRET=mockpermissions_secret
+
+readonly BASEURL=http://localhost:8080/auth/realms/${REALM}
+
+export ADMIN ADMINPWD
+export USER USERPWD
+export CLIENT_LOGIN_ID CLIENT_LOGIN_SECRET
+export CLIENT_PERMISSIONS_ID CLIENT_PERMISSIONS_SECRET
+export REALM
+export BASEURL
