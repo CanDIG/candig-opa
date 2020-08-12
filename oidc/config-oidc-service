@@ -7,6 +7,6 @@ do
 done
 
 docker exec oidc /opt/jboss/setup_keycloak_realm.sh > config.out
-docker-compose restart
-sleep 10
+docker-compose restart oidc
+sleep 15
 docker exec oidc /opt/jboss/setup_keycloak_users.sh >> config.out

@@ -1,10 +1,26 @@
 version: '3'
 services:
-  oidc-server-mock:
+  fake_beacon:
+    build: fake_beacon
+    ports:
+      - "8000:80"
+    volumes:
+      - ./rootCA.crt:/rootCA.crt
+    environment:
+      ROOT_CA: /rootCA.crt
+      IDP: https://oidc:8443/auth/realms/mockrealm/protocol/openid-connect
+      CLIENT_ID: mock_login_client
+      CLIENT_SECRET: mock_login_secret
+      PERMISSIONS_SERVER: http://opa:8181/v1/data/permissions
+  oidc:
     container_name: oidc
     image: jboss/keycloak
     ports:
       - "8080:8080"
+      - "8443:8443"
+    volumes:
+      - ./oidc/tls.crt:/etc/x509/https/tls.crt
+      - ./oidc/tls.key:/etc/x509/https/tls.key
     environment:
       KEYCLOAK_USER: kcadmin
       KEYCLOAK_PASSWORD: admin
@@ -15,6 +31,7 @@ services:
     # TODO - have an authorization policy for OPA
     volumes:
       - ./permissions_engine/permissions.rego:/policy.rego
+      - ./rootCA.crt:/rootCA.crt
     command:
       - "run"
       - "--server"

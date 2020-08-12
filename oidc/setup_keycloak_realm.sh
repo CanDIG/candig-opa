@@ -30,6 +30,7 @@ echo "# Creating permissions client.."
 PERMISSIONS_ID=$(${KC_PATH}/kcadm.sh create clients -r ${REALM} -s clientId=${CLIENT_PERMISSIONS_ID} \
                                      -s secret=${CLIENT_PERMISSIONS_SECRET} \
                                      -s enabled=true -s 'redirectUris=["*"]' \
+                                     -s bearerOnly=true \
                                      -i)
 
 echo "# Permissions client ID follows..."

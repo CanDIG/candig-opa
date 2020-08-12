@@ -15,13 +15,16 @@ controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:s
 # OIDC service configuration - use localhost rather than oidc-server-mock for non-docker-compose evaluation
 # 
 
-oidc_base = "http://oidc-server-mock:8080/auth/realms/mockrealm/"
+oidc_base = "https://oidc:8443/auth/realms/mockrealm/"
+
+#rootCA = "./rootCA.crt"
+rootCA = "/rootCA.crt"
 
 wellknown_url = concat("", [oidc_base, ".well-known/openid-configuration"])
-oidc_config := http.send({"method": "get", "url": wellknown_url})
+oidc_config := http.send({"method": "get", "url": wellknown_url, "tls_ca_cert_file": rootCA}).body
 
-introspection_url := oidc_config.body.introspection_endpoint
-userinfo_url := oidc_config.body.userinfo_endpoint
+introspection_url := oidc_config.introspection_endpoint
+userinfo_url := oidc_config.userinfo_endpoint
 
 #
 # OIDC service credentials
@@ -41,14 +44,16 @@ basic_client_authn := concat(" ", ["Basic", base64.encode(concat(":", [client_id
 # }
 #
 
-introspect = http.send({"url": introspection_url,
+foo := input
+
+introspect = http.send({"url": introspection_url, "tls_ca_cert_file": rootCA,
                         "headers": {"Authorization": basic_client_authn, "Content-Type": "application/x-www-form-urlencoded"},
                         "method": "post",
-                        "raw_body": concat("=", ["token", input.token])}).body
+                        "raw_body": concat("=", ["token", input.token])})
 
-userinfo = http.send({"url": userinfo_url,
+userinfo = http.send({"url": userinfo_url, "tls_ca_cert_file": rootCA,
                       "headers": {"Authorization": concat(" ", ["Bearer", input.token])},
-                      "method": "get"}).body
+                      "method": "get"})
 
 default valid_token = false
 
