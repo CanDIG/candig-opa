@@ -11,7 +11,7 @@ services:
       IDP: https://oidc:8443/auth/realms/mockrealm/protocol/openid-connect
       CLIENT_ID: mock_login_client
       CLIENT_SECRET: mock_login_secret
-      PERMISSIONS_SERVER: http://opa:8181/v1/data/permissions
+      PERMISSIONS_SERVER: http://opa:8181/v1/data/permissions/datasets
   oidc:
     container_name: oidc
     image: jboss/keycloak
@@ -24,6 +24,7 @@ services:
     environment:
       KEYCLOAK_USER: kcadmin
       KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_LOGLEVEL: INFO
   opa:
     image: openpolicyagent/opa:latest
     ports:

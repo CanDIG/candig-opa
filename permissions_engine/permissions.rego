@@ -32,6 +32,8 @@ userinfo_url := oidc_config.userinfo_endpoint
 
 client_id := "mock_permissions_client"
 client_secret := "mockpermissions_secret"  # TODO: push this via API
+#client_id := "mock_login_client"
+#client_secret := "mock_login_secret"  # TODO: push this via API
 
 basic_client_authn := concat(" ", ["Basic", base64.encode(concat(":", [client_id, client_secret]))])
 
@@ -49,11 +51,11 @@ foo := input
 introspect = http.send({"url": introspection_url, "tls_ca_cert_file": rootCA,
                         "headers": {"Authorization": basic_client_authn, "Content-Type": "application/x-www-form-urlencoded"},
                         "method": "post",
-                        "raw_body": concat("=", ["token", input.token])})
+                        "raw_body": concat("=", ["token", input.token])}).body
 
 userinfo = http.send({"url": userinfo_url, "tls_ca_cert_file": rootCA,
                       "headers": {"Authorization": concat(" ", ["Bearer", input.token])},
-                      "method": "get"})
+                      "method": "get"}).body
 
 default valid_token = false
 

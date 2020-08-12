@@ -11,8 +11,7 @@ readonly CLIENT_PERMISSIONS_ID=mock_permissions_client
 readonly CLIENT_PERMISSIONS_SECRET=mockpermissions_secret
 
 readonly BASEURL=http://localhost:8080/auth/realms/${REALM}
-#readonly OPAURL=http://localhost:8181/v1/data/permissions/datasets
-readonly OPAURL=http://localhost:8181/v1/data/permissions
+readonly OPAURL=http://localhost:8181/v1/data/permissions/datasets
 export ADMIN ADMINPWD
 export USER USERPWD
 export CLIENT_LOGIN_ID CLIENT_LOGIN_SECRET

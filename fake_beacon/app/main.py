@@ -1,7 +1,6 @@
 from typing import Optional
 import os
 
-import json
 import requests
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -20,7 +19,7 @@ permissions_server = os.getenv("PERMISSIONS_SERVER", "http://opa:8181/v1/data/pe
 
 
 @app.get("/login")
-def get_token(username: Optional[str], password: Optional[str]):
+def get_token(username: Optional[str] = "", password: Optional[str] = ""):
     payload = {'grant_type': 'password',
                'username': username,
                'password': password,
@@ -41,8 +40,8 @@ def get_token(username: Optional[str], password: Optional[str]):
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code)
 
-    global token
     try:
+        global token
         token = response.json()['access_token']
     except:
         raise HTTPException(status_code=500)
@@ -51,7 +50,7 @@ def get_token(username: Optional[str], password: Optional[str]):
 
 
 @app.get("/permissions")
-def get_permissions():
+def get_permissions(token: Optional[str] = ""):
     if not token:
         raise HTTPException(status_code=401, detail="Not logged in")
 
