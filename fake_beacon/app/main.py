@@ -1,13 +1,15 @@
+"""
+This toy service implements the role of the beacon in this deployment -
+accessing the OAuth2/OIDC service for authentication and querying the 
+permissions server for authorization.
+"""
 from typing import Optional
 import os
 
 import requests
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 
 app = FastAPI()
-
-token = None
 
 rootCA = os.getenv("ROOT_CA", None)
 
@@ -25,23 +27,16 @@ def get_token(username: Optional[str] = "", password: Optional[str] = ""):
                'password': password,
                'redirect_uri': "http://fake_beacon:8000/auth/oidc"}
 
-    print(idp)
-    print(payload)
-    print(rootCA)
     if rootCA:
         #response = requests.post(idp, data=payload, auth=(client_id, client_secret), verify=rootCA)
         response = requests.post(f"{idp}/token", data=payload, auth=(client_id, client_secret), verify=False)
     else:
         response = requests.post(f"{idp}/token", data=payload, auth=(client_id, client_secret))
 
-    print(response)
-    print(response.json())
-
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code)
 
     try:
-        global token
         token = response.json()['access_token']
     except:
         raise HTTPException(status_code=500)

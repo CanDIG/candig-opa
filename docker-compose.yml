@@ -24,7 +24,6 @@ services:
     environment:
       KEYCLOAK_USER: kcadmin
       KEYCLOAK_PASSWORD: admin
-      KEYCLOAK_LOGLEVEL: INFO
   opa:
     image: openpolicyagent/opa:latest
     ports:
@@ -33,6 +32,11 @@ services:
     volumes:
       - ./permissions_engine/permissions.rego:/policy.rego
       - ./rootCA.crt:/rootCA.crt
+    environment:
+      IDP: https://oidc:8443/auth/realms/mockrealm/
+      ROOT_CA: /rootCA.crt
+      CLIENT_ID: mock_permissions_client
+      CLIENT_SECRET: mockpermissions_secret
     command:
       - "run"
       - "--server"

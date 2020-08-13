@@ -12,28 +12,21 @@ controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:s
                           "user2": ["controlled5"]}
 
 #
-# OIDC service configuration - use localhost rather than oidc-server-mock for non-docker-compose evaluation
+# OIDC service configuration
 # 
 
-oidc_base = "https://oidc:8443/auth/realms/mockrealm/"
+env := opa.runtime().env
+oidc_base := object.get(env, "IDP", "https://oidc:8443/auth/realms/mockrealm/")
+rootCA := object.get(env, "ROOT_CA", "/rootCA.crt")
+client_id := object.get(env, "CLIENT_ID", "mock_permissions_client")
+client_secret := object.get(env, "CLIENT_SECRET", "mockpermissions_secret")
 
-#rootCA = "./rootCA.crt"
-rootCA = "/rootCA.crt"
 
 wellknown_url = concat("", [oidc_base, ".well-known/openid-configuration"])
 oidc_config := http.send({"method": "get", "url": wellknown_url, "tls_ca_cert_file": rootCA}).body
 
 introspection_url := oidc_config.introspection_endpoint
 userinfo_url := oidc_config.userinfo_endpoint
-
-#
-# OIDC service credentials
-#
-
-client_id := "mock_permissions_client"
-client_secret := "mockpermissions_secret"  # TODO: push this via API
-#client_id := "mock_login_client"
-#client_secret := "mock_login_secret"  # TODO: push this via API
 
 basic_client_authn := concat(" ", ["Basic", base64.encode(concat(":", [client_id, client_secret]))])
 
