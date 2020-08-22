@@ -10,18 +10,17 @@ Generate internal TLS certificates, self-signed by a root CA:
 ./generate-certs.sh
 ```
 
-You'll be asked for a passphrase for the signing key and to validate it, and then asked for that key twice more.
-If you're asked for the subject of the first certificate, type whatever you want for country, state, and organization,
-but specify `oidc` as the FQDN.
+You'll be asked for a passphrase for the signing key and to validate it, and then asked for that key three times more.
 
 Once done, fire everything up - currently that's the IdP (Keycloak), permission engine (OPA), and fake_beacon, which
-plays role of a beacon here - triggering login and requesting permissions.
+plays role of a beacon here - triggering login and requesting permissions, and a shim between the fake_beacon and
+opa:
 
 ```
 docker-compose up -d
 ```
 
-When the IdP is up and running (when `docker-compose logs oidc` shows `Admin console listening`), configure keycloak
+When keycloak is up and running (when `docker-compose logs oidc` shows `Admin console listening`), configure keycloak
 with two users (user1 and user2); user1 is a trusted researcher with access to controlled dataset #4, and user2 is
 not a trusted researcher but has access to controlled dataset #5.  It also sets up clients for the login process
 and for the permissions server, which connects to the IdP's userinfo and introspection endpoints.
