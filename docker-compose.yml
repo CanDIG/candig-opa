@@ -11,7 +11,7 @@ services:
       IDP: https://oidc:8443/auth/realms/mockrealm/protocol/openid-connect
       IDP_CLIENT_ID: mock_login_client
       IDP_CLIENT_SECRET: mock_login_secret
-      PERMISSIONS_SERVER: https://opa:8181/v1/data/permissions/datasets
+      PERMISSIONS_SHIM: https://shim:8180/permissions
       PERMISSIONS_SECRET: my-secret-beacon-token
 
   oidc:
