@@ -1,0 +1,89 @@
+swagger: '2.0'
+info:
+  title: Permissions Server
+  version: '1.0'
+  description: An API to a permissions server
+  contact:
+    name: CanDIG
+    url: https://www.distributedgenomics.ca
+    email: info@distributedgenomics.ca
+  license:
+    name: GPL
+
+host: localhost
+schemes:
+- https
+
+consumes:
+- application/json
+produces:
+- application/json
+
+#securityDefinitions:
+#  auth_token:
+#    type: apiKey
+#    in: header
+#    name: Authorization
+
+    
+paths:
+  "/permissions":
+    post:
+      operationId: main.permissions
+      summary: Get Permissions
+#      security:
+#        - auth_token: []
+      parameters:
+        - in: body
+          name: request
+          description: the request being made
+          schema:
+            type: object
+            required:
+              - clientSecret
+              - path
+              - method
+            properties:
+              clientSecret:
+                type: string
+                example: "secret"
+              path:
+                type: array
+                items:
+                  type: string
+                example: ["beacon"]
+              method:
+                type: string
+                example: "get"
+      responses:
+        '200':
+          description: Datasets for which permission is granted
+          schema:
+            type: array
+            description: Allowed datasets
+            items:
+              type: string
+          examples:
+            application/json:
+              datasets:
+              - dataset1
+              - dataset3
+        '401':
+          description: Unauthorized - no client secret provided
+          schema:
+            type: string
+          examples:
+            '"No client secret provided"': {}
+        '403':
+          description: Forbidden - no client secret provided
+          schema:
+            type: string
+          examples:
+            No client secret provided: {}
+        '500':
+          schema:
+            type: string
+          description: Internal Error
+          examples:
+            Internal Error: {}
+      description: Return datasets for which permission for the given operation and user is granted.  Requires a user's valid access token in the header and a client secret to the permissions engine in the body

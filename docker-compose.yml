@@ -27,6 +27,23 @@ services:
       KEYCLOAK_USER: kcadmin
       KEYCLOAK_PASSWORD: admin
 
+  shim:
+    build: permissions_shim
+    ports:
+      - "8180:8180"
+    volumes:
+      - ./rootCA.crt:/rootCA.crt
+      - ./permissions_shim/tls.crt:/tls.crt
+      - ./permissions_shim/tls.key:/tls.key
+    command:
+      - "--host=0.0.0.0"
+      - "--port=8180"
+      - "--tls_key=/tls.key"
+      - "--tls_cert=/tls.crt"
+    environment:
+      PERMISSIONS_ENGINE: https://opa:8181/v1/data/permissions/datasets
+      ROOT_CA: /rootCA.crt
+
   opa:
     image: openpolicyagent/opa:latest
     ports:
