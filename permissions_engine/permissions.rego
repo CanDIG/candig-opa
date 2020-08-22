@@ -1,6 +1,6 @@
 package permissions
-
-# This is the set of policy definitios for the permissions engine.
+#
+# This is the set of policy definitions for the permissions engine.
 # 
 
 default datasets = []
@@ -38,8 +38,6 @@ basic_client_authn := concat(" ", ["Basic", base64.encode(concat(":", [client_id
 #     'path': path to request on beacon
 # }
 #
-
-foo := input
 
 introspect = http.send({"url": introspection_url, "tls_ca_cert_file": rootCA,
                         "headers": {"Authorization": basic_client_authn, "Content-Type": "application/x-www-form-urlencoded"},

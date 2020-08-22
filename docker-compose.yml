@@ -11,7 +11,8 @@ services:
       IDP: https://oidc:8443/auth/realms/mockrealm/protocol/openid-connect
       CLIENT_ID: mock_login_client
       CLIENT_SECRET: mock_login_secret
-      PERMISSIONS_SERVER: http://opa:8181/v1/data/permissions/datasets
+      PERMISSIONS_SERVER: https://opa:8181/v1/data/permissions/datasets
+
   oidc:
     container_name: oidc
     image: jboss/keycloak
@@ -24,6 +25,7 @@ services:
     environment:
       KEYCLOAK_USER: kcadmin
       KEYCLOAK_PASSWORD: admin
+
   opa:
     image: openpolicyagent/opa:latest
     ports:
@@ -31,6 +33,8 @@ services:
     # TODO - have an authorization policy for OPA
     volumes:
       - ./permissions_engine/permissions.rego:/policy.rego
+      - ./permissions_engine/tls.crt:/public.crt
+      - ./permissions_engine/tls.key:/private.key
       - ./rootCA.crt:/rootCA.crt
     environment:
       IDP: https://oidc:8443/auth/realms/mockrealm/
@@ -40,5 +44,9 @@ services:
     command:
       - "run"
       - "--server"
-      - "--log-level=debug"
+      - "--addr"
+      - "https://0.0.0.0:8181"
+      - "--log-level=info"
+      - "--tls-cert-file=/public.crt"
+      - "--tls-private-key-file=/private.key"
       - "/policy.rego"

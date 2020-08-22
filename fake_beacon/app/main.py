@@ -17,7 +17,7 @@ idp = os.getenv("IDP", "https://oidc:8443/auth/realms/mockrealm/protocol/openid-
 client_id = os.getenv("CLIENT_ID", "mock_login_client")
 client_secret = os.getenv("CLIENT_SECRET", "mock_login_secret")
 
-permissions_server = os.getenv("PERMISSIONS_SERVER", "http://opa:8181/v1/data/permission")
+permissions_server = os.getenv("PERMISSIONS_SERVER", "https://opa:8181/v1/data/permission")
 
 
 @app.get("/login")
@@ -28,8 +28,7 @@ def get_token(username: Optional[str] = "", password: Optional[str] = ""):
                'redirect_uri': "http://fake_beacon:8000/auth/oidc"}
 
     if rootCA:
-        #response = requests.post(idp, data=payload, auth=(client_id, client_secret), verify=rootCA)
-        response = requests.post(f"{idp}/token", data=payload, auth=(client_id, client_secret), verify=False)
+        response = requests.post(f"{idp}/token", data=payload, auth=(client_id, client_secret), verify=rootCA)
     else:
         response = requests.post(f"{idp}/token", data=payload, auth=(client_id, client_secret))
 
@@ -50,6 +49,7 @@ def get_permissions(token: Optional[str] = ""):
         raise HTTPException(status_code=401, detail="Not logged in")
 
     response = requests.post(permissions_server, 
-                             json={"input": {"method": "GET", "path": ["beacon"], "token": token}})
+                             json={"input": {"method": "GET", "path": ["beacon"], "token": token}},
+                             verify=rootCA)
     
     return response.json()
