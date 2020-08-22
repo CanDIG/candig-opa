@@ -33,6 +33,7 @@ services:
       - 8181:8181
     volumes:
       - ./permissions_engine/permissions.rego:/policy.rego
+      - ./permissions_engine/idp.rego:/idp.rego
       - ./permissions_engine/authz.rego:/authz.rego
       - ./permissions_engine/tls.crt:/public.crt
       - ./permissions_engine/tls.key:/private.key
@@ -54,5 +55,6 @@ services:
       - "--tls-private-key-file=/private.key"
       - "--authentication=token"
       - "--authorization=basic"
-      - "/policy.rego"
       - "/authz.rego"
+      - "/policy.rego"
+      - "/idp.rego"
