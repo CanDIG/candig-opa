@@ -1,5 +1,7 @@
 # Beacon Permissions Server
 
+![Diagram showing interactions between services](./diagram.png)
+
 ## Running
 
 Generate internal TLS certificates, self-signed by a root CA:
