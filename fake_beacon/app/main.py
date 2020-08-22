@@ -17,8 +17,8 @@ idp = os.getenv("IDP", "https://oidc:8443/auth/realms/mockrealm/protocol/openid-
 client_id = os.getenv("IDP_CLIENT_ID", "mock_login_client")
 client_secret = os.getenv("IDP_CLIENT_SECRET", "mock_login_secret")
 
-permissions_server = os.getenv("PERMISSIONS_SERVER",
-                               "https://opa:8181/v1/data/permissions/datasets")
+permissions_server = os.getenv("PERMISSIONS_SHIM",
+                               "https://shim:8180/permissions")
 permissions_secret = os.getenv("PERMISSIONS_SECRET",
                                "my-secret-beacon-token")
 
@@ -58,8 +58,10 @@ def get_permissions(token: Optional[str] = ""):
         raise HTTPException(status_code=401, detail="Not logged in")
 
     response = requests.post(permissions_server,
-                             headers={"Authorization": f"Bearer {permissions_secret}"},
-                             json={"input": {"method": "GET", "path": ["beacon"], "token": token}},
+                             headers={"Authorization": f"Bearer {token}"},
+                             json={"method": "GET",
+                                   "path": ["beacon"],
+                                   "clientSecret": permissions_secret},
                              verify=rootCA)
 
     return response.json()
