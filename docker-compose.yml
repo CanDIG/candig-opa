@@ -9,9 +9,10 @@ services:
     environment:
       ROOT_CA: /rootCA.crt
       IDP: https://oidc:8443/auth/realms/mockrealm/protocol/openid-connect
-      CLIENT_ID: mock_login_client
-      CLIENT_SECRET: mock_login_secret
+      IDP_CLIENT_ID: mock_login_client
+      IDP_CLIENT_SECRET: mock_login_secret
       PERMISSIONS_SERVER: https://opa:8181/v1/data/permissions/datasets
+      PERMISSIONS_SECRET: my-secret-beacon-token
 
   oidc:
     container_name: oidc
@@ -33,6 +34,7 @@ services:
     # TODO - have an authorization policy for OPA
     volumes:
       - ./permissions_engine/permissions.rego:/policy.rego
+      - ./permissions_engine/authz.rego:/authz.rego
       - ./permissions_engine/tls.crt:/public.crt
       - ./permissions_engine/tls.key:/private.key
       - ./rootCA.crt:/rootCA.crt
@@ -49,4 +51,7 @@ services:
       - "--log-level=info"
       - "--tls-cert-file=/public.crt"
       - "--tls-private-key-file=/private.key"
+      - "--authentication=token"
+      - "--authorization=basic"
       - "/policy.rego"
+      - "/authz.rego"
