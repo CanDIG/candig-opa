@@ -18,8 +18,8 @@ controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:s
 env := opa.runtime().env
 oidc_base := object.get(env, "IDP", "https://oidc:8443/auth/realms/mockrealm/")
 rootCA := object.get(env, "ROOT_CA", "/rootCA.crt")
-client_id := object.get(env, "CLIENT_ID", "mock_permissions_client")
-client_secret := object.get(env, "CLIENT_SECRET", "mockpermissions_secret")
+client_id := object.get(env, "IDP_CLIENT_ID", "mock_permissions_client")
+client_secret := object.get(env, "IDP_CLIENT_SECRET", "mockpermissions_secret")
 
 
 wellknown_url = concat("", [oidc_base, ".well-known/openid-configuration"])

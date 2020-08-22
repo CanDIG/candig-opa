@@ -12,12 +12,17 @@ rights = {
     },
 }
 
-# Tokens may be defined in policy or pushed into OPA as data.
+# Tokens provided asn env variables
+
+env := opa.runtime().env
+root_token := object.get(env, "CLIENT_SECRET_ROOT", "no_root_token")
+beacon_token := object.get(env, "CLIENT_SECRET_BEACON", "no_beacon_token")
+
 tokens = {
-    "my-secret-root-token": {
+    root_token : {
         "roles": ["admin"]
     },
-    "my-secret-beacon-token": {
+    beacon_token : {
         "roles": ["datasets"]
     }
 }

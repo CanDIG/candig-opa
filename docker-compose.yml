@@ -31,7 +31,6 @@ services:
     image: openpolicyagent/opa:latest
     ports:
       - 8181:8181
-    # TODO - have an authorization policy for OPA
     volumes:
       - ./permissions_engine/permissions.rego:/policy.rego
       - ./permissions_engine/authz.rego:/authz.rego
@@ -41,8 +40,10 @@ services:
     environment:
       IDP: https://oidc:8443/auth/realms/mockrealm/
       ROOT_CA: /rootCA.crt
-      CLIENT_ID: mock_permissions_client
-      CLIENT_SECRET: mockpermissions_secret
+      IDP_CLIENT_ID: mock_permissions_client
+      IDP_CLIENT_SECRET: mockpermissions_secret
+      CLIENT_SECRET_ROOT: my-secret-root-token
+      CLIENT_SECRET_BEACON: my-secret-beacon-token
     command:
       - "run"
       - "--server"
