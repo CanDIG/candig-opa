@@ -9,6 +9,6 @@ then
 fi
 
 source config.sh
-curl "${OPAURL}" \
+curl -k "${OPAURL}" \
     -H "Content-Type: application/json" -H "Accept: application/json" \
     -d "{\"input\": {\"method\": \"GET\", \"path\": [\"beacon\"], \"token\": \"${token}\"}}"
