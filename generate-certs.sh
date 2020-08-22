@@ -4,7 +4,7 @@ set -euo pipefail
 # credit: https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309
 
 openssl genrsa -des3 -out rootCA.key 4096
-openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.crt
+openssl req -x509 -new -nodes -key rootCA.key -subj '/C=CA/ST=Ontario/O=Demo/CN=Beacon Self-signed Root' -sha256 -days 1024 -out rootCA.crt
 
 # generate IdP cert
 
