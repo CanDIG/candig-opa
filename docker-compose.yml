@@ -23,6 +23,7 @@ services:
     volumes:
       - ./oidc/tls.crt:/etc/x509/https/tls.crt
       - ./oidc/tls.key:/etc/x509/https/tls.key
+      - ./oidc/data:/opt/jboss/keycloak/standalone/data
     environment:
       KEYCLOAK_USER: kcadmin
       KEYCLOAK_PASSWORD: admin

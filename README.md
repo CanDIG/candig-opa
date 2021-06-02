@@ -20,17 +20,15 @@ opa:
 docker-compose up -d
 ```
 
-When keycloak is up and running (when `docker-compose logs oidc` shows `Admin console listening`), configure keycloak
-with two users (user1 and user2); user1 is a trusted researcher with access to controlled dataset #4, and user2 is
-not a trusted researcher but has access to controlled dataset #5.  It also sets up clients for the login process
-and for the permissions server, which connects to the IdP's userinfo and introspection endpoints.
+When keycloak is up and running (when `docker-compose logs oidc` shows `Admin console listening`), it should be ready to go -
+the keycloak database here is preconfigured with two users (user1 and user2), with user1 being a trusted researcher.
+In the OPA configuration, user1 has  access to controlled dataset #4, (and registered #3 since they are a trusted researcher)
+and user2 is has access to controlled dataset #5.
 
- ```
- ./oidc/config-oidc-service
- ```
-That restarts the IdP and so will take 20 seconds or so.
+In addition to the policies defined in OPA (the permissions engine), OPA directly connects to the IdP's userinfo
+to validate the token.
 
-Once that's done, you can "log in" to the fake beacon; it currenly returns the access token to you, which of course
+When everything is ready, you can "log in" to the fake beacon; it currenly returns the access token to you, which of course
 isn't realistic:
 
 ```
@@ -61,3 +59,12 @@ curl "http://localhost:8000/permissions_count?token=${TOKEN1}" | jq .
 curl "http://localhost:8000/permissions_count?token=${TOKEN2}" | jq .
 ```
 Both tokens can access open datasets and controlled4 dataset which opts in for COUNT permission.
+
+
+Note that if the users don't appear to be present in keycloak, you can create them yourself the following
+script creates the realm, sets up clients for the login process, and creates the users:
+
+ ```
+ ./oidc/config-oidc-service
+ ```
+That restarts the IdP and so will take 20 seconds or so.
