@@ -54,3 +54,10 @@ curl "http://localhost:8000/permissions?token=${TOKEN2}" | jq .
 
 Both users can access the open data sets, only trusted researcher `user1` can access the registered datset,
 and each can access their particular controlled dataset.
+
+You can query the permission for COUNT in case some datasets might opt in for COUNT permission to everyone with valid token:
+```
+curl "http://localhost:8000/permissions_count?token=${TOKEN1}" | jq .
+curl "http://localhost:8000/permissions_count?token=${TOKEN2}" | jq .
+```
+Both tokens can access open datasets and controlled4 dataset which opts in for COUNT permission.

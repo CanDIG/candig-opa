@@ -65,3 +65,20 @@ def get_permissions(token: Optional[str] = ""):
                              verify=rootCA)
 
     return response.json()
+
+@app.get("/permissions_count")
+def get_permissions(token: Optional[str] = ""):
+    """
+    Given passed token, look up permissions for that user
+    """
+    if not token:
+        raise HTTPException(status_code=401, detail="Not logged in")
+
+    response = requests.post(permissions_server,
+                             headers={"Authorization": f"Bearer {token}"},
+                             json={"method": "GET",
+                                   "path": ["counts"],
+                                   "clientSecret": permissions_secret},
+                             verify=rootCA)
+
+    return response.json()
