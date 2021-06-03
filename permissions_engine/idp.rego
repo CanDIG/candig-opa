@@ -25,14 +25,33 @@ userinfo_url := oidc_config.userinfo_endpoint
 #
 basic_client_authn := concat(" ", ["Basic", base64.encode(concat(":", [client_id, client_secret]))])
 
-#
-# Get the introspection and userinfo data
-#
-introspect := http.send({"url": introspection_url, "tls_ca_cert_file": rootCA,
-                         "headers": {"Authorization": basic_client_authn, "Content-Type": "application/x-www-form-urlencoded"},
-                         "method": "post",
-                         "raw_body": concat("=", ["token", input.token])}).body
 
-userinfo := http.send({"url": userinfo_url, "tls_ca_cert_file": rootCA,
-                       "headers": {"Authorization": concat(" ", ["Bearer", input.token])},
-                       "method": "get"}).body
+
+default key_sets ={"https://oidc:8443/auth/realms/mockrealm" : `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv01+/YRAwXaVVC7qYM1uCVZeRqePwOWQ/IJU9z8fFeuTGMREIltMV865DHFA4ZZRxD2hQWri0D3YkMwfe/qrJeEWxCGzI0wFiemE9ezEwh5d6en8oqBg3YahKWRbGquPBTrz0B5quMKzvG0rTWELYiGIrIaUiNRzDE7Z4tFDzB30oM5o/5O5/gm/vwuA08HqpoYb+/Xql6+R3p7xk7ZtvlhdYKxJbRueOAsUmvlvaKS7xDg8Igx0NuBoZxkeURhVF0ZqjPfZlo7mhL0LpgzIOMLye46Cc5bdaU7T+qpI77QNgcR2xgp89wDqEnqLMLWrhOYCM1X6n+sokZyFloyNqQIDAQAB
+-----END PUBLIC KEY-----`}
+output := io.jwt.decode(input.token)            # decode the token
+claims := output[1]
+#
+# Check if the token is valid
+#
+valid_token {
+    input.token                          # token exists
+    some x
+    io.jwt.verify_rs256(input.token, key_sets[x]) == true
+    claims.iss == x
+    time_now := time.now_ns()/1000000000
+    claims.exp > time_now
+}
+
+
+
+#
+# Check trusted_researcher in the token payload
+#
+trusted_researcher {
+    claims.trusted_researcher == true        
+}
+
+
+username := claims.preferred_username        # get username from the token payload

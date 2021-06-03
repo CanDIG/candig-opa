@@ -4,9 +4,7 @@ package permissions
 # 
 
 default datasets = []
-default key_sets ={"https://oidc:8443/auth/realms/mockrealm" : `-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv01+/YRAwXaVVC7qYM1uCVZeRqePwOWQ/IJU9z8fFeuTGMREIltMV865DHFA4ZZRxD2hQWri0D3YkMwfe/qrJeEWxCGzI0wFiemE9ezEwh5d6en8oqBg3YahKWRbGquPBTrz0B5quMKzvG0rTWELYiGIrIaUiNRzDE7Z4tFDzB30oM5o/5O5/gm/vwuA08HqpoYb+/Xql6+R3p7xk7ZtvlhdYKxJbRueOAsUmvlvaKS7xDg8Igx0NuBoZxkeURhVF0ZqjPfZlo7mhL0LpgzIOMLye46Cc5bdaU7T+qpI77QNgcR2xgp89wDqEnqLMLWrhOYCM1X6n+sokZyFloyNqQIDAQAB
------END PUBLIC KEY-----`}
+
 
 open_datasets = ["open1", "open2"]
 registered_datasets = ["registered3"]
@@ -23,24 +21,8 @@ opt_in_datasets = ["controlled4"]
 # }
 #
 
-import data.idp.introspect
-import data.idp.userinfo
-
-default valid_token = false
-
-valid_token = true {
-    input.token                          # token exists
-    some x
-    [valid, header, payload] := io.jwt.decode_verify(     # Decode and verify in one-step
-        input.token,
-        {                                                 # With the supplied constraints:
-            "cert": key_sets[x],                                 #   Verify the token with the certificate
-            "iss": x,                                 #   Ensure the issuer claim is the expected value
-            "time": time.now_ns()/1000000000,
-        }
-    )
-}
-
+import data.idp.valid_token
+import data.idp.trusted_researcher
 #
 # is registered access allowed?
 # TODO: decide on claim we're using for registered access
@@ -49,8 +31,8 @@ valid_token = true {
 default registered_allowed = []
 
 registered_allowed = registered_datasets {
-    valid_token == true                  # extant, valid token
-    userinfo.trusted_researcher == true  # has claim we're using for registered access
+    valid_token                  # extant, valid token
+    # trusted_researcher  # has claim we're using for registered access
 }
 
 #
@@ -58,13 +40,10 @@ registered_allowed = registered_datasets {
 #
 
 default controlled_allowed = []
-
-iss = introspect.iss
-sub = introspect.sub 
-username = introspect.username
+import data.idp.username
 
 controlled_allowed = controlled_access_list[username]{
-    valid_token == true                  # extant, valid token
+    valid_token                  # extant, valid token
 }
 
 
