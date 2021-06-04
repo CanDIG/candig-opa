@@ -61,6 +61,12 @@ curl "http://localhost:8000/permissions_count?token=${TOKEN2}" | jq .
 Both tokens can access open datasets and controlled4 dataset which opts in for COUNT permission.
 
 
+You can test a properly signed expired token
+```
+curl "http://localhost:8000/permissions?token=$(cat expired_token)" | jq .
+```
+
+
 Note that if the users don't appear to be present in keycloak, you can create them yourself the following
 script creates the realm, sets up clients for the login process, and creates the users:
 
