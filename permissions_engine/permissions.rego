@@ -22,7 +22,7 @@ opt_in_datasets = ["controlled4"]
 
 import data.idp.valid_token
 import data.idp.trusted_researcher
-import data.idp.usernam
+import data.idp.username
 
 #
 # is registered access allowed?
