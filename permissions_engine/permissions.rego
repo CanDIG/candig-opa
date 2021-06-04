@@ -32,7 +32,7 @@ default registered_allowed = []
 
 registered_allowed = registered_datasets {
     valid_token                  # extant, valid token
-    # trusted_researcher  # has claim we're using for registered access
+    trusted_researcher  # has claim we're using for registered access
 }
 
 #
