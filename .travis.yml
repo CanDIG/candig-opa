@@ -6,6 +6,8 @@ services:
 before_install:
 - sudo apt-get -y install expect
 - ./script_generate_certs.sh fake_key
+- ls -ld oidc/data
+- ls -ld oidc/data/*
 - docker-compose up -d
 - ./script_wait_keycloak.sh
 
