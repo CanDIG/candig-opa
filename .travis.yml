@@ -1,0 +1,12 @@
+language: python
+
+services:
+  - docker
+
+before_install:
+- ./script_generate_certs.sh fake_key
+- docker-compose up -d
+- ./script_wait_keycloak.sh
+
+script:
+- pytest tests
