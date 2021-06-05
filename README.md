@@ -1,4 +1,6 @@
-# Beacon Permissions Server
+# Rego Development Playground
+
+[![Build Status](https://travis-ci.com/CanDIG/rego_development_playground.svg?branch=main)](https://travis-ci.com/CanDIG/rego_development_playground)
 
 ![Diagram showing interactions between services](./diagram.png)
 
