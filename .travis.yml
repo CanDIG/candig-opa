@@ -8,6 +8,7 @@ before_install:
 - pip install -r tests/requirements.txt
 - ./script_generate_certs.sh fake_key
 - docker-compose up -d
+- ./script_wait_keycloak.sh
 - ./oidc/config-oidc-service
 - ./script_wait_keycloak.sh
 
