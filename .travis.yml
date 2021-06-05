@@ -7,7 +7,6 @@ before_install:
 - sudo apt-get -y install expect
 - ./script_generate_certs.sh fake_key
 - docker-compose up -d
-- sleep 5
 - ./script_wait_keycloak.sh
 
 script:
