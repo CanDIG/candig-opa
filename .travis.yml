@@ -6,9 +6,9 @@ services:
 before_install:
 - sudo apt-get -y install expect
 - pip install -r tests/requirements.txt
-- find oidc/data -type d -exec chmod 777 {} \;
 - ./script_generate_certs.sh fake_key
 - docker-compose up -d
+- ./oidc/config-oidc-service
 - ./script_wait_keycloak.sh
 
 script:
