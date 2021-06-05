@@ -10,6 +10,7 @@ before_install:
 - ls -ld oidc/data/*
 - docker-compose up -d
 - ./script_wait_keycloak.sh
+- pip install -r tests/requirements.txt
 
 script:
 - pytest tests
