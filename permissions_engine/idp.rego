@@ -2,37 +2,49 @@ package idp
 # for interacting with the IdP
 
 #
-# IdP service configuration
+# Configuration
 #
 
 env := opa.runtime().env
-oidc_base := object.get(env, "IDP", "https://oidc:8443/auth/realms/mockrealm/")
 rootCA := object.get(env, "ROOT_CA", "/rootCA.crt")
-client_id := object.get(env, "IDP_CLIENT_ID", "mock_permissions_client")
-client_secret := object.get(env, "IDP_CLIENT_SECRET", "mockpermissions_secret")
+audience := "account"
+#
+# Define valid keys
+#
+key_sets := {"https://oidc:8443/auth/realms/mockrealm" : `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv01+/YRAwXaVVC7qYM1uCVZeRqePwOWQ/IJU9z8fFeuTGMREIltMV865DHFA4ZZRxD2hQWri0D3YkMwfe/qrJeEWxCGzI0wFiemE9ezEwh5d6en8oqBg3YahKWRbGquPBTrz0B5quMKzvG0rTWELYiGIrIaUiNRzDE7Z4tFDzB30oM5o/5O5/gm/vwuA08HqpoYb+/Xql6+R3p7xk7ZtvlhdYKxJbRueOAsUmvlvaKS7xDg8Igx0NuBoZxkeURhVF0ZqjPfZlo7mhL0LpgzIOMLye46Cc5bdaU7T+qpI77QNgcR2xgp89wDqEnqLMLWrhOYCM1X6n+sokZyFloyNqQIDAQAB
+-----END PUBLIC KEY-----`}
 
 #
-# Get IdP endpoints
+# Store decode and verified token
 #
-wellknown_url := concat("", [oidc_base, ".well-known/openid-configuration"])
-oidc_config := http.send({"method": "get", "url": wellknown_url, "tls_ca_cert_file": rootCA}).body
+decode_verify_token_output = output{
+	some iss
+    output:=io.jwt.decode_verify(     # Decode and verify in one-step
+            input.token,
+            {                                                 # With the supplied constraints:
+                "cert": key_sets[iss],
+                "iss": iss,
+                "aud": audience
+            }
+    )
+    valid = output[0]
+    valid == true
+}
 
-introspection_url := oidc_config.introspection_endpoint
-userinfo_url := oidc_config.userinfo_endpoint
+#
+# Check if token is valid by checking whether decoded_verify output exists or not
+#
+valid_token = true {
+    decode_verify_token_output
+}
 
 #
-# setup basic client authentication for the IdP
+# Check trusted_researcher in the token payload
 #
-basic_client_authn := concat(" ", ["Basic", base64.encode(concat(":", [client_id, client_secret]))])
+trusted_researcher = true {
+    decode_verify_token_output[0]
+    decode_verify_token_output[2].trusted_researcher == true        
+}
 
-#
-# Get the introspection and userinfo data
-#
-introspect := http.send({"url": introspection_url, "tls_ca_cert_file": rootCA,
-                         "headers": {"Authorization": basic_client_authn, "Content-Type": "application/x-www-form-urlencoded"},
-                         "method": "post",
-                         "raw_body": concat("=", ["token", input.token])}).body
-
-userinfo := http.send({"url": userinfo_url, "tls_ca_cert_file": rootCA,
-                       "headers": {"Authorization": concat(" ", ["Bearer", input.token])},
-                       "method": "get"}).body
+username := decode_verify_token_output[2].preferred_username        # get username from the token payload
