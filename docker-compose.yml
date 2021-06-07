@@ -54,6 +54,7 @@ services:
       - ./permissions_engine/authz.rego:/authz.rego
       - ./permissions_engine/tls.crt:/public.crt
       - ./permissions_engine/tls.key:/private.key
+      - ./permissions_engine/data.json:/data.json
       - ./rootCA.crt:/rootCA.crt
     environment:
       IDP: https://oidc:8443/auth/realms/mockrealm/
@@ -75,3 +76,4 @@ services:
       - "/authz.rego"
       - "/policy.rego"
       - "/idp.rego"
+      - "/data.json"
