@@ -34,6 +34,11 @@ That restarts the IdP and so will take 20 seconds or so.
 
 When keycloak is up and running (when `docker-compose logs oidc` shows `Admin console listening`), it should be ready to go.
 
+Then download certificate from the keycloak's jwk uri into `data.json ` under the directory `permissions_engine`.
+```
+python3 permissions_engine/fetch_keys.py
+```
+
 In addition to the policies defined in OPA (the permissions engine), OPA directly connects to the IdP's userinfo
 to validate the token.
 

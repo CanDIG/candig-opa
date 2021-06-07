@@ -4,7 +4,7 @@ package idp
 #
 # Configuration
 #
-import data
+
 env := opa.runtime().env
 rootCA := object.get(env, "ROOT_CA", "/rootCA.crt")
 audience := "account"

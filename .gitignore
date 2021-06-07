@@ -6,3 +6,4 @@
 *.csr
 .pytest_cache
 tests/__pycache__
+permissions_engine/data.json
