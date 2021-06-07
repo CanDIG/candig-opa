@@ -8,11 +8,11 @@ before_install:
 - pip install -r tests/requirements.txt
 - ./script_generate_certs.sh fake_key
 - docker-compose up -d
-- python3 permissions_engine/fetch_keys.py
-- docker-compose restart opa
 - ./script_wait_keycloak.sh
 - ./oidc/config-oidc-service
 - ./script_wait_keycloak.sh
+- python3 permissions_engine/fetch_keys.py
+- docker-compose restart opa
 
 script:
 - pytest tests
