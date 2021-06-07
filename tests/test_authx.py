@@ -58,3 +58,27 @@ def test_user1_registered_access(user1_token):
     """
     datasets = helper_get_permissions(user1_token, PERMISSIONS)
     assert "registered3" in datasets
+
+
+@pytest.fixture
+def user2_token():
+    """
+    Return the token for user2
+    """
+    return helper_get_user_token("user2", "pass2")
+
+
+def test_user1_controlled_access(user1_token):
+    """"
+    Make sure user2 has access to controlled5
+    """
+    datasets = helper_get_permissions(user1_token, PERMISSIONS)
+    assert "controlled5" not in datasets
+
+
+def test_user1_registered_access(user1_token):
+    """
+    User2, not being a trusted researcher, should not have acess to registered3
+    """
+    datasets = helper_get_permissions(user1_token, PERMISSIONS)
+    assert "registered3" not in datasets
