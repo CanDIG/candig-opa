@@ -1,5 +1,6 @@
 import pytest
 import requests
+import time
 """
 This test suite will cover the manual tests in README.md, ensuring that
 authorization happens correctly
@@ -36,7 +37,7 @@ def helper_get_permissions(token, url):
     return body["datasets"]
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def user1_token():
     """
     Return the token for user1
@@ -59,8 +60,16 @@ def test_user1_registered_access(user1_token):
     datasets = helper_get_permissions(user1_token, PERMISSIONS)
     assert "registered3" in datasets
 
+def test_expired(user1_token):
+    """
+    Make sure expired token will not have access to datasets other than open datasets
+    """
+    time.sleep(300)
+    datasets = helper_get_permissions(user1_token, PERMISSIONS)
+    assert "registered3" not in datasets
+    assert "controlled4" not in datasets
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def user2_token():
     """
     Return the token for user2
@@ -68,17 +77,17 @@ def user2_token():
     return helper_get_user_token("user2", "pass2")
 
 
-def test_user1_controlled_access(user1_token):
+def test_user1_controlled_access(user2_token):
     """"
     Make sure user2 has access to controlled5
     """
-    datasets = helper_get_permissions(user1_token, PERMISSIONS)
-    assert "controlled5" not in datasets
+    datasets = helper_get_permissions(user2_token, PERMISSIONS)
+    assert "controlled5" in datasets
 
 
-def test_user1_registered_access(user1_token):
+def test_user1_registered_access(user2_token):
     """
     User2, not being a trusted researcher, should not have acess to registered3
     """
-    datasets = helper_get_permissions(user1_token, PERMISSIONS)
+    datasets = helper_get_permissions(user2_token, PERMISSIONS)
     assert "registered3" not in datasets

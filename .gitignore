@@ -5,3 +5,5 @@
 *.srl
 *.csr
 oidc/data
+.pytest_cache
+tests/__pycache__
