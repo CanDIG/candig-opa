@@ -77,7 +77,7 @@ def user2_token():
     return helper_get_user_token("user2", "pass2")
 
 
-def test_user1_controlled_access(user2_token):
+def test_user2_controlled_access(user2_token):
     """"
     Make sure user2 has access to controlled5
     """
@@ -85,7 +85,7 @@ def test_user1_controlled_access(user2_token):
     assert "controlled5" in datasets
 
 
-def test_user1_registered_access(user2_token):
+def test_user2_registered_access(user2_token):
     """
     User2, not being a trusted researcher, should not have acess to registered3
     """
