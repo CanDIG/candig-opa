@@ -5,7 +5,6 @@ package permissions
 
 default datasets = []
 
-
 open_datasets = ["open1", "open2"]
 registered_datasets = ["registered3"]
 
@@ -23,6 +22,8 @@ opt_in_datasets = ["controlled4"]
 
 import data.idp.valid_token
 import data.idp.trusted_researcher
+import data.idp.username
+
 #
 # is registered access allowed?
 # TODO: decide on claim we're using for registered access
@@ -40,15 +41,12 @@ registered_allowed = registered_datasets {
 #
 
 default controlled_allowed = []
-import data.idp.username
 
 controlled_allowed = controlled_access_list[username]{
     valid_token                  # extant, valid token
 }
 
-
 #List of all allowed datasets for this request
-
 
 datasets = array.concat(array.concat(open_datasets, registered_allowed), controlled_allowed) {
     input.method = "GET"                   # only allow GET requestst
