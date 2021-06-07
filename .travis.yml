@@ -1,0 +1,20 @@
+language: python
+
+services:
+  - docker
+
+before_install:
+- touch permissions_engine/data.json
+- sudo apt-get -y install expect
+- pip install -r tests/requirements.txt
+- ./script_generate_certs.sh fake_key
+- docker-compose up -d
+- ./script_wait_keycloak.sh
+- ./oidc/config-oidc-service
+- ./script_wait_keycloak.sh
+- python3 permissions_engine/fetch_keys.py
+- docker-compose restart opa
+
+script:
+- pytest tests
+- docker-compose logs
