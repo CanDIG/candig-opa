@@ -14,6 +14,11 @@ Generate internal TLS certificates, self-signed by a root CA:
 
 You'll be asked for a passphrase for the signing key and to validate it, and then asked for that key three times more.
 
+Create a file in permission_engine:
+```
+touch permissions_engine/data.json
+```
+
 Once done, fire everything up - currently that's the IdP (Keycloak), permission engine (OPA), and fake_beacon, which
 plays role of a beacon here - triggering login and requesting permissions, and a shim between the fake_beacon and
 opa:
@@ -37,6 +42,11 @@ When keycloak is up and running (when `docker-compose logs oidc` shows `Admin co
 Then download certificate from the keycloak's jwk uri into `data.json ` under the directory `permissions_engine`.
 ```
 python3 permissions_engine/fetch_keys.py
+```
+
+Restart OPA
+```
+docker-compose restart opa
 ```
 
 In addition to the policies defined in OPA (the permissions engine), OPA directly connects to the IdP's userinfo
