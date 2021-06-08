@@ -62,7 +62,7 @@ def test_user1_registered_access(user1_token):
 
 def test_user1_invalid(user1_token):
     """
-    Make sure expired token will not have access to datasets other than open datasets
+    Make sure invalid token will not have access to datasets other than open datasets
     """
     invalid_token = 'A' + user1_token[1:]
     datasets = helper_get_permissions(invalid_token, PERMISSIONS)
@@ -105,7 +105,7 @@ def test_user2_registered_access(user2_token):
 
 def test_user2_invalid(user2_token):
     """
-    Make sure expired token will not have access to datasets other than open datasets
+    Make sure invalid token will not have access to datasets other than open datasets
     """
     invalid_token = 'A' + user2_token[1:]
     datasets = helper_get_permissions(invalid_token, PERMISSIONS)
