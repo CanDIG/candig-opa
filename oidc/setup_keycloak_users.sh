@@ -5,18 +5,17 @@ set -euo pipefail
 
 source /opt/jboss/config.sh
 readonly KC_PATH=/opt/jboss/keycloak/bin
-
 echo "# Connecting to keycloak..."
 ${KC_PATH}/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user ${ADMIN} --password ${ADMINPWD}
 
 echo "# Looking up user1"
-ID1=$( ${KC_PATH}/kcadm.sh get users -r mockrealm -q username=user1 --fields id --format csv | tr -d \")
+ID1=$( ${KC_PATH}/kcadm.sh get users -r mockrealm -q username=${USER1} --fields id --format csv | tr -d \")
 
 echo "# Adding trusted_researcher attribute"
 ${KC_PATH}/kcadm.sh update users/${ID1} -r mockrealm -s "attributes.trusted_researcher=true"
 
 echo "# Looking up user2"
-ID2=$( ${KC_PATH}/kcadm.sh get users -r mockrealm -q username=user2 --fields id --format csv | tr -d \")
+ID2=$( ${KC_PATH}/kcadm.sh get users -r mockrealm -q username=${USER2} --fields id --format csv | tr -d \")
 
 echo "# Adding trusted_researcher attribute"
 ${KC_PATH}/kcadm.sh update users/${ID2} -r mockrealm -s "attributes.trusted_researcher=false"
