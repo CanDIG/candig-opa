@@ -12,7 +12,7 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI()
 
 rootCA = os.getenv("ROOT_CA", None)
-
+default_idp = "https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect"
 idp = os.getenv("IDP", "https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect").split()
 client_id = os.getenv("IDP_CLIENT_ID", "mock_login_client")
 client_secret = os.getenv("IDP_CLIENT_SECRET", "mock_login_secret")
@@ -23,7 +23,7 @@ permissions_secret = os.getenv("PERMISSIONS_SECRET",
                                "my-secret-beacon-token")
 
 @app.get("/login")
-def get_token(username: Optional[str] = "", password: Optional[str] = "", oidc: Optional[str] = ""):
+def get_token(username: Optional[str] = "", password: Optional[str] = "", oidc: Optional[str] = default_idp):
     """
     Perform user credentials flow with OIDC and return token for testing purposes
     """
