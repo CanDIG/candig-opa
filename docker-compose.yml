@@ -8,25 +8,44 @@ services:
       - ./rootCA.crt:/rootCA.crt
     environment:
       ROOT_CA: /rootCA.crt
-      IDP: https://oidc:8443/auth/realms/mockrealm/protocol/openid-connect
+      IDP: https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect
       IDP_CLIENT_ID: mock_login_client
       IDP_CLIENT_SECRET: mock_login_secret
       PERMISSIONS_SHIM: https://shim:8180/permissions
       PERMISSIONS_SECRET: my-secret-beacon-token
 
-  oidc:
-    container_name: oidc
+  oidc1:
+    container_name: oidc1
     image: jboss/keycloak
     ports:
       - "8080:8080"
       - "8443:8443"
     volumes:
-      - ./oidc/tls.crt:/etc/x509/https/tls.crt
-      - ./oidc/tls.key:/etc/x509/https/tls.key
+      - ./oidc/tls_oidc1.crt:/etc/x509/https/tls.crt
+      - ./oidc/tls_oidc1.key:/etc/x509/https/tls.key
     environment:
       KEYCLOAK_USER: kcadmin
       KEYCLOAK_PASSWORD: admin
-
+      USER1: user1
+      USER1PWD: pass1
+      USER2: user2
+      USER2PWD: pass2
+  oidc2:
+    container_name: oidc2
+    image: jboss/keycloak
+    ports:
+      - "8081:8080"
+      - "8444:8443"
+    volumes:
+      - ./oidc/tls_oidc2.crt:/etc/x509/https/tls.crt
+      - ./oidc/tls_oidc2.key:/etc/x509/https/tls.key
+    environment:
+      KEYCLOAK_USER: kcadmin
+      KEYCLOAK_PASSWORD: admin
+      USER1: user3
+      USER1PWD: pass3
+      USER2: user4
+      USER2PWD: pass4
   shim:
     build: permissions_shim
     ports:
@@ -57,7 +76,7 @@ services:
       - ./permissions_engine/data.json:/data.json
       - ./rootCA.crt:/rootCA.crt
     environment:
-      IDP: https://oidc:8443/auth/realms/mockrealm/
+      IDP: https://oidc1:8443/auth/realms/mockrealm/ https://oidc2:8443/auth/realms/mockrealm/
       ROOT_CA: /rootCA.crt
       IDP_CLIENT_ID: mock_permissions_client
       IDP_CLIENT_SECRET: mockpermissions_secret

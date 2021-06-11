@@ -12,8 +12,8 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI()
 
 rootCA = os.getenv("ROOT_CA", None)
-
-idp = os.getenv("IDP", "https://oidc:8443/auth/realms/mockrealm/protocol/openid-connect")
+default_idp = "https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect"
+idp = os.getenv("IDP", "https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect").split()
 client_id = os.getenv("IDP_CLIENT_ID", "mock_login_client")
 client_secret = os.getenv("IDP_CLIENT_SECRET", "mock_login_secret")
 
@@ -23,7 +23,7 @@ permissions_secret = os.getenv("PERMISSIONS_SECRET",
                                "my-secret-beacon-token")
 
 @app.get("/login")
-def get_token(username: Optional[str] = "", password: Optional[str] = ""):
+def get_token(username: Optional[str] = "", password: Optional[str] = "", oidc: Optional[str] = default_idp):
     """
     Perform user credentials flow with OIDC and return token for testing purposes
     """
@@ -32,14 +32,16 @@ def get_token(username: Optional[str] = "", password: Optional[str] = ""):
                'password': password,
                'redirect_uri': "http://fake_beacon:8000/auth/oidc"}
 
-    if rootCA:
-        response = requests.post(f"{idp}/token", auth=(client_id, client_secret), verify=rootCA,
-                                 data=payload)
-    else:
-        response = requests.post(f"{idp}/token", auth=(client_id, client_secret), data=payload)
+    print(oidc, flush=True)
+    if oidc in idp:
+        if rootCA:
+            response = requests.post(f"{oidc}/token", auth=(client_id, client_secret), verify=rootCA,
+                                    data=payload)
+        else:
+            response = requests.post(f"{oidc}/token", auth=(client_id, client_secret), data=payload)
 
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code)
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code)
 
     try:
         token = response.json()['access_token']

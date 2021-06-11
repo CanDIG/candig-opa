@@ -3,7 +3,8 @@ import json
 
 data = dict()
 data["keys"] = dict()
-issuers = [("http://localhost:8080/auth/realms/mockrealm", "https://oidc:8443/auth/realms/mockrealm")]
+issuers = [("http://localhost:8080/auth/realms/mockrealm", "https://oidc1:8443/auth/realms/mockrealm"),
+            ("http://localhost:8081/auth/realms/mockrealm", "https://oidc2:8443/auth/realms/mockrealm")]
 
 for (external, internal) in issuers:
     response = requests.get(external + "/.well-known/openid-configuration")

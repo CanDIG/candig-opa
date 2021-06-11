@@ -3,10 +3,20 @@ language: python
 services:
   - docker
 
+cache:
+  directories:
+  - docker_images
+
 before_install:
+- docker load -i docker_images/images.tar || true
+- pip install -r tests/requirements.txt
+
+before_cache:
+- docker save -o docker_images/images.tar $(docker images -a -q)
+
+install:
 - touch permissions_engine/data.json
 - sudo apt-get -y install expect
-- pip install -r tests/requirements.txt
 - ./script_generate_certs.sh fake_key
 - docker-compose up -d
 - ./script_wait_keycloak.sh

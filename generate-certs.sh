@@ -8,9 +8,12 @@ openssl req -x509 -new -nodes -key rootCA.key -subj '/C=CA/ST=Ontario/O=Demo/CN=
 
 # generate IdP cert
 
-openssl genrsa -out oidc/tls.key 2048
-openssl req -new -sha256 -key oidc/tls.key -subj '/C=CA/ST=Ontario/O=Demo/CN=oidc' -out oidc/tls.csr
-openssl x509 -req -in oidc/tls.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out oidc/tls.crt -days 500 -sha256 -extfile oidc/oidc.v3.ext
+for oidc in 'oidc1' 'oidc2'
+do
+    openssl genrsa -out oidc/tls_${oidc}.key 2048
+    openssl req -new -sha256 -key oidc/tls_${oidc}.key -subj "/C=CA/ST=Ontario/O=Demo/CN=${oidc}" -out oidc/tls_${oidc}.csr
+    openssl x509 -req -in oidc/tls_${oidc}.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out oidc/tls_${oidc}.crt -days 500 -sha256 -extfile oidc/${oidc}.v3.ext
+done
 
 # generate OPA cert
 

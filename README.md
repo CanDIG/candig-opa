@@ -89,3 +89,16 @@ You can test a properly signed expired token and should only get the open datase
 ```
 curl "http://localhost:8000/permissions?token=$(cat expired_token)" | jq .
 ```
+
+You can also capture tokens from the second keycloak by:  
+```
+TOKEN3=$( curl "http://localhost:8000/login?username=user3&password=pass3&oidc=https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect" | jq .access_token | tr -d \" )
+TOKEN4=$( curl "http://localhost:8000/login?username=user4&password=pass4&oidc=https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect" | jq .access_token | tr -d \" )
+```
+
+then you can query the permission server the same way:
+
+```
+curl "http://localhost:8000/permissions?token=${TOKEN3}" | jq .
+curl "http://localhost:8000/permissions?token=${TOKEN4}" | jq .
+```
