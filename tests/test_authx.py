@@ -137,8 +137,8 @@ def test_user3_controlled_access(user3_token):
     Make sure user3 has access to controlled6 and controlled7
     """
     datasets = helper_get_permissions(user3_token, PERMISSIONS)
+    assert "controlled4" in datasets
     assert "controlled6" in datasets
-    assert "controlled7" in datasets
 
 
 def test_user3_registered_access(user3_token):
@@ -154,8 +154,8 @@ def test_user3_invalid(user3_token):
     """
     invalid_token = 'A' + user3_token[1:]
     datasets = helper_get_permissions(invalid_token, PERMISSIONS)
+    assert "controlled4" not in datasets
     assert "controlled6" not in datasets
-    assert "controlled7" not in datasets
     assert "registered3" not in datasets
     assert "open1" in datasets
     assert "open2" in datasets
@@ -180,10 +180,10 @@ def user4_token():
 
 def test_user4_controlled_access(user4_token):
     """"
-    Make sure user4 has access to controlled6 and controlled7
+    Make sure user4 has access to controlled6 and controlled5
     """
     datasets = helper_get_permissions(user4_token, PERMISSIONS)
-    assert "controlled8" in datasets
+    assert "controlled5" in datasets
 
 
 def test_user4_registered_access(user4_token):
@@ -199,13 +199,13 @@ def test_user4_invalid(user4_token):
     """
     invalid_token = 'A' + user4_token[1:]
     datasets = helper_get_permissions(invalid_token, PERMISSIONS)
-    assert "controlled8" not in datasets
+    assert "controlled5" not in datasets
     assert "open1" in datasets
     assert "open2" in datasets
 
 def test_user4_opt_in_access(user4_token):
     """
-    Make sure user3 has access to opt in dataset controlled4
+    Make sure user4 has access to opt in dataset controlled4
     """
     datasets = helper_get_permissions(user4_token, PERMISSIONS_COUNT)
     assert "controlled4" in datasets
