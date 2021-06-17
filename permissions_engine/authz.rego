@@ -10,6 +10,9 @@ rights = {
     "datasets": {
         "path": ["v1", "data", "permissions", "datasets"]
     },
+    "tokenControlledAccessREMS": {
+        "path": ["v1", "data", "ga4ghPassport", "tokenControlledAccessREMS"]
+    }
 }
 
 # Tokens provided asn env variables
@@ -23,7 +26,7 @@ tokens = {
         "roles": ["admin"]
     },
     beacon_token : {
-        "roles": ["datasets"]
+        "roles": ["datasets", "tokenControlledAccessREMS"]
     }
 }
 

@@ -71,6 +71,7 @@ services:
       - ./permissions_engine/permissions.rego:/policy.rego
       - ./permissions_engine/idp.rego:/idp.rego
       - ./permissions_engine/authz.rego:/authz.rego
+      - ./permissions_engine/ga4ghPassport.rego:/ga4ghPassport.rego
       - ./permissions_engine/tls.crt:/public.crt
       - ./permissions_engine/tls.key:/private.key
       - ./permissions_engine/data.json:/data.json
@@ -87,7 +88,7 @@ services:
       - "--server"
       - "--addr"
       - "https://0.0.0.0:8181"
-      - "--log-level=info"
+      - "--log-level=debug"
       - "--tls-cert-file=/public.crt"
       - "--tls-private-key-file=/private.key"
       - "--authentication=token"
@@ -95,4 +96,44 @@ services:
       - "/authz.rego"
       - "/policy.rego"
       - "/idp.rego"
+      - "/ga4ghPassport.rego"
       - "/data.json"
+
+  db-katsu:
+    image: postgres:latest
+    container_name: db-katsu
+    environment:
+      POSTGRES_DB: metadata
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - katsu-db-data:/var/lib/postgresql/data
+  katsu:
+    build: katsu
+    container_name: katsu
+    volumes:
+      - ./katsu_entrypoint.sh:/app/katsu_entrypoint.sh
+      - ./rootCA.crt:/rootCA.crt
+    entrypoint: ["/app/katsu_entrypoint.sh"]
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db-katsu
+      - opa
+    environment:
+      POSTGRES_HOST: "db-katsu"
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: metadata
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      CANDIG_OPA_URL: https://opa:8181
+      ROOT_CA: /rootCA.crt
+      IDP: https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect
+      IDP_CLIENT_ID: mock_login_client
+      IDP_CLIENT_SECRET: mock_login_secret
+      PERMISSIONS_SHIM: https://shim:8180/permissions
+      PERMISSIONS_SECRET: my-secret-beacon-token
+volumes:
+  katsu-db-data:

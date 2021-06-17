@@ -13,9 +13,13 @@ readonly CLIENT_PERMISSIONS_SECRET=mockpermissions_secret
 readonly BASEURL=http://localhost:8080/auth/realms/${REALM}
 readonly OPAURL=https://localhost:8181/v1/data/permissions/datasets
 readonly SHIMURL=https://localhost:8180/permissions
+readonly KATSU_POSTGRES_DB=metadata
+readonly KATSU_POSTGRES_USER=admin
+readonly KATSU_POSTGRES_PASSWORD=admin
 export ADMIN ADMINPWD
 export USER USERPWD
 export CLIENT_LOGIN_ID CLIENT_LOGIN_SECRET
 export CLIENT_PERMISSIONS_ID CLIENT_PERMISSIONS_SECRET
 export REALM
 export BASEURL
+export KATSU_POSTGRES_DB KATSU_POSTGRES_USER KATSU_POSTGRES_PASSWORD
