@@ -60,3 +60,10 @@ datasets = array.concat(open_datasets, opt_in_datasets) {
      input.method = "GET"
      input.path = ["counts"]
 }
+
+# for katsu
+datasets = array.concat(array.concat(open_datasets, registered_allowed), controlled_allowed) 
+{
+    input.body.method = "GET"                   # only allow GET requestst
+    input.body.path = "api/phenopackets"
+}

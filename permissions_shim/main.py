@@ -19,11 +19,18 @@ def permissions(request):
     """
     user_token = connexion.request.headers['Authorization'].split(' ')[1]
     client_secret = request['clientSecret']
+
     response = requests.post(permissions_server,
                              headers={"Authorization": f"Bearer {client_secret}"},
-                             json={"input": {"method": request['method'],
-                                             "path": request['path'],
-                                             "token": user_token}},
+                             json={"input": 
+                                        {
+                                            "headers": {
+                                                "X-Candig-Local-Oidc": user_token
+                                            },
+                                            "method": request['method'],
+                                            "path": request['path']
+                                        }
+                                    },
                              verify=rootCA)
 
     if response.status_code != 200:

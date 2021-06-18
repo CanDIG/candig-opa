@@ -6,10 +6,13 @@ services:
 cache:
   directories:
   - docker_images
+git:
+  submodules: false
 
 before_install:
 - docker load -i docker_images/images.tar || true
 - pip install -r tests/requirements.txt
+- git submodule update --init --recursive
 
 before_cache:
 - docker save -o docker_images/images.tar $(docker images -a -q)

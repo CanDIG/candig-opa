@@ -1,0 +1,4 @@
+[submodule "katsu"]
+	path = katsu
+	url = https://github.com/CanDIG/katsu.git
+    branch = nina/rego_dev_playground

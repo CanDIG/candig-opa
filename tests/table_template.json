@@ -1,0 +1,5 @@
+{
+    "ownership_record": "TABLE_ID",
+    "name": "TABLE_NAME",
+    "data_type": "phenopacket"
+}
