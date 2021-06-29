@@ -1,0 +1,13 @@
+{
+    "id": "BIOSAMPLE_ID",
+    "procedure": {
+        "code": {
+            "id": "BIOSAMPLE_ID",
+            "label": "procedure for BIOSAMPLE_ID"
+        }
+    },
+    "sampled_tissue": {
+        "id": "BIOSAMPLE_ID",
+        "label": "label"
+    }
+}

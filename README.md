@@ -131,8 +131,8 @@ then you can have the beacon query the katsu server(currently only phenopackets 
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN1\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN2\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
 ```
-User1 should have access to 4 datasets, open1, open2, registered3 and controlled4. Therefore, user1 should have access to pheno_1, pheno_2, pheno_3 and pheno_4.
-User2 should have access to 3 datasets, open1, open2, and controlled4. Therefore, user2 should have access to pheno_1, pheno_2, and pheno_4.
+User1 should have access to 4 datasets, open1, open2, registered3 and controlled4. 
+User2 should have access to 3 datasets, open1, open2, and controlled4. 
 
 You can also do the same thing for the second keycloak
 Capture tokens by running: 
@@ -147,5 +147,5 @@ then you can have the beacon query the katsu server(currently only phenopackets 
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN3\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN4\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
 ```
-User3 should have access to 5 datasets, open1, open2, registered3, controlled4, controlled6. Therefore, user3 should have access to pheno_1, pheno_2, pheno_3 and pheno_4, and pheno_6.
-User4 should have access to 3 datasets, open1, open2, and controlled5. Therefore, user4 should have access to pheno_1, pheno_2, and pheno_5.
+User3 should have access to 5 datasets, open1, open2, registered3, controlled4, controlled6.
+User4 should have access to 3 datasets, open1, open2, and controlled5. 

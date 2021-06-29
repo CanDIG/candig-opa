@@ -1,0 +1,11 @@
+{
+  "id": "PHENOPACKET_ID",
+  "subject": "INDIVIDUAL_ID",
+  "meta_data": 0,
+  "table": "TABLE_ID",
+  "biosamples": ["BIOSAMPLE_ID"],
+  "genes": ["GENE_ID"],
+  "variants": ["VARIANT_ID"],
+  "diseases": ["DISEASE_ID"],
+  "hts_files": ["HTSFILE_ID"]
+}

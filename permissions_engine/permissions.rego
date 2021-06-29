@@ -13,6 +13,12 @@ controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:s
                           "user3": ["controlled4", "controlled6"],
                           "user4": ["controlled5"]}
 opt_in_datasets = ["controlled4"]
+
+input_paths = ["/api/phenopackets/?.*", "/api/datasets/?.*", "/api/diagnoses/?.*", "/api/diseases/?.*",
+                 "/api/genes/?.*", "/api/genomicinterpretations/?.*", "/api/htsfiles/?.*", "/api/individuals/?.*",
+                 "/api/interpretations/?.*", "/api/metadata/?.*", "/api/phenopackets/?.*", "/api/phenotypicfeatures/?.*",
+                 "/api/procedures/?.*", "/api/variants/?.*"]
+
 #
 # Provided: 
 # input = {
@@ -61,9 +67,21 @@ datasets = array.concat(open_datasets, opt_in_datasets) {
      input.path = ["counts"]
 }
 
-# for katsu
+#
+# List of all allowed datasets for requests coming from Katsu
+#
+
+# allowed datasets
 datasets = array.concat(array.concat(open_datasets, registered_allowed), controlled_allowed) 
 {
     input.body.method = "GET"                   # only allow GET requestst
-    input.body.path = "api/phenopackets"
+    regex.match(input_paths[_], input.body.path) == true
+}
+
+# allowed datasets for counting
+datasets = array.concat(open_datasets, opt_in_datasets) {
+    valid_token == true
+    input.method = "GET"
+    regex.match(input_paths[_], input.body.path) == true
+    input.query_type = "counts"
 }
