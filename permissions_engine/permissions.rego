@@ -17,7 +17,7 @@ opt_in_datasets = ["controlled4"]
 input_paths = ["/api/phenopackets/?.*", "/api/datasets/?.*", "/api/diagnoses/?.*", "/api/diseases/?.*",
                  "/api/genes/?.*", "/api/genomicinterpretations/?.*", "/api/htsfiles/?.*", "/api/individuals/?.*",
                  "/api/interpretations/?.*", "/api/metadata/?.*", "/api/phenopackets/?.*", "/api/phenotypicfeatures/?.*",
-                 "/api/procedures/?.*", "/api/variants/?.*"]
+                 "/api/procedures/?.*", "/api/variants/?.*", "/api/biosamples/?.*"]
 
 #
 # Provided: 
