@@ -40,12 +40,12 @@ def user1_token():
 
 def test_user1_genomicinterpretations_access(user1_token):
     """"
-    Make sure user1 has access to open1, open2, registered3 and controlled4
+    Make sure user1 has access to all datasets since genomic interpretations are not filtered
     """
     response = helper_get_katsu_response(user1_token, f"{KATSU_URL}/api/genomicinterpretations")
     assert response.status_code == 200
     response_json = response.json()
-    assert response_json["count"] == 4
+    assert response_json["count"] == 6
     genomicinterpretations_ids = list()
     genomicinterpretations_dscps = list()
     for genomicinterpretation in response_json["results"]:
@@ -55,9 +55,11 @@ def test_user1_genomicinterpretations_access(user1_token):
     assert "open2" in genomicinterpretations_dscps
     assert "registered3" in genomicinterpretations_dscps
     assert "controlled4" in genomicinterpretations_dscps
+    assert "controlled5" in genomicinterpretations_dscps
+    assert "controlled6" in genomicinterpretations_dscps
     
     '''
-    Make sure user1 has access to open1, open2, registered3 and controlled4 by id
+    Make sure user1 has access to all datasets by id since genomic interpretations are not filtered
     '''
 
     for id in genomicinterpretations_ids:
@@ -68,166 +70,19 @@ def test_user1_genomicinterpretations_access(user1_token):
 
 def test_user1_genomicinterpretations_invalid(user1_token):
     """
-    Make sure invalid token will not have access to datasets other than open datasets
+    Make sure invalid token still has access to all datasets
     """
     invalid_token = 'A' + user1_token[1:]
     response = helper_get_katsu_response(invalid_token, f"{KATSU_URL}/api/genomicinterpretations")
     assert response.status_code == 200
     response_json = response.json()
-    assert response_json["count"] == 2
+    assert response_json["count"] == 6
     genomicinterpretations_dscps = set()
     for genomicinterpretation in response_json["results"]:
         genomicinterpretations_dscps.add(genomicinterpretation["extra_properties"]["description"])
-    assert "open1" in genomicinterpretations_dscps
-    assert "open2" in genomicinterpretations_dscps
-    assert "registered3" not in genomicinterpretations_dscps
-    assert "controlled4" not in genomicinterpretations_dscps
-
-
-@pytest.fixture(scope="session")
-def user2_token():
-    """
-    Return the token for user2
-    """
-    return helper_get_user_token("user2", "pass2")
-
-def test_user2_genomicinterpretations_access(user2_token):
-    """"
-    Make sure user2 has access to open1, open2, registered3 and controlled 4
-    """
-    response = helper_get_katsu_response(user2_token, f"{KATSU_URL}/api/genomicinterpretations")
-    assert response.status_code == 200
-    response_json = response.json()
-    assert response_json["count"] == 3
-    genomicinterpretations_ids = list()
-    genomicinterpretations_dscps = list()
-    for genomicinterpretation in response_json["results"]:
-        genomicinterpretations_ids.append(genomicinterpretation["id"])
-        genomicinterpretations_dscps.append(genomicinterpretation["extra_properties"]["description"])
-
-    """"
-    Make sure user2 has access to open1, open2, and controlled5
-    """
-    for id in genomicinterpretations_ids:
-        response = helper_get_katsu_response(user2_token, f"{KATSU_URL}/api/genomicinterpretations/{id}")
-        assert response.status_code == 200
-        assert "id" in response.json().keys()
-
-def test_user2_genomicinterpretations_invalid(user2_token):
-    """
-    Make sure invalid token will not have access to datasets other than open datasets
-    """
-    invalid_token = 'A' + user2_token[1:]
-    response = helper_get_katsu_response(invalid_token, f"{KATSU_URL}/api/genomicinterpretations")
-    assert response.status_code == 200
-    response_json = response.json()
-    assert response_json["count"] == 2
-    genomicinterpretations_dscps = set()
-    for genomicinterpretation in response_json["results"]:
-        genomicinterpretations_dscps.add(genomicinterpretation["extra_properties"]["description"])
-    assert "open1" in genomicinterpretations_dscps
-    assert "open2" in genomicinterpretations_dscps
-    assert "registered3" not in genomicinterpretations_dscps
-    assert "controlled5" not in genomicinterpretations_dscps
-
-
-@pytest.fixture(scope="session")
-def user3_token():
-    """
-    Return the token for user3
-    """
-    return helper_get_user_token("user3", "pass3", OIDC2_URL)
-
-def test_user3_genomicinterpretations_access(user3_token):
-    """"
-    Make sure user3 has access to open1, open2, registered3, controlled4, and controlled6
-    """
-    response = helper_get_katsu_response(user3_token, f"{KATSU_URL}/api/genomicinterpretations")
-    assert response.status_code == 200
-    response_json = response.json()
-    assert response_json["count"] == 5
-    genomicinterpretations_ids = list()
-    genomicinterpretations_dscps = list()
-    for genomicinterpretation in response_json["results"]:
-        genomicinterpretations_ids.append(genomicinterpretation["id"])
-        genomicinterpretations_dscps.append(genomicinterpretation["extra_properties"]["description"])
     assert "open1" in genomicinterpretations_dscps
     assert "open2" in genomicinterpretations_dscps
     assert "registered3" in genomicinterpretations_dscps
     assert "controlled4" in genomicinterpretations_dscps
-    assert "controlled6" in genomicinterpretations_dscps
-    """"
-    Make sure user3 has access to open1, open2, registered3, controlled4, and controlled6 by id
-    """
-    for id in genomicinterpretations_ids:
-        response = helper_get_katsu_response(user3_token, f"{KATSU_URL}/api/genomicinterpretations/{id}")
-        assert response.status_code == 200
-        assert "id" in response.json().keys()
-
-def test_user3_genomicinterpretations_invalid(user3_token):
-    """
-    Make sure invalid token will not have access to datasets other than open datasets
-    """
-    invalid_token = 'A' + user3_token[1:]
-    response = helper_get_katsu_response(invalid_token, f"{KATSU_URL}/api/genomicinterpretations")
-    assert response.status_code == 200
-    response_json = response.json()
-    assert response_json["count"] == 2
-    genomicinterpretations_dscps = set()
-    for genomicinterpretation in response_json["results"]:
-        genomicinterpretations_dscps.add(genomicinterpretation["extra_properties"]["description"])
-    assert "open1" in genomicinterpretations_dscps
-    assert "open2" in genomicinterpretations_dscps
-    assert "registered3" not in genomicinterpretations_dscps
-    assert "controlled4" not in genomicinterpretations_dscps
-    assert "controlled6" not in genomicinterpretations_dscps
-
-
-@pytest.fixture(scope="session")
-def user4_token():
-    """
-    Return the token for user4
-    """
-    return helper_get_user_token("user4", "pass4", OIDC2_URL)
-
-
-def test_user4_genomicinterpretations_access(user4_token):
-    """"
-    Make sure user3 has access to open1, open2, and controlled5
-    """
-    response = helper_get_katsu_response(user4_token, f"{KATSU_URL}/api/genomicinterpretations")
-    assert response.status_code == 200
-    response_json = response.json()
-    assert response_json["count"] == 3
-    genomicinterpretations_ids = list()
-    genomicinterpretations_dscps = list()
-    for genomicinterpretation in response_json["results"]:
-        genomicinterpretations_ids.append(genomicinterpretation["id"])
-        genomicinterpretations_dscps.append(genomicinterpretation["extra_properties"]["description"])
-    assert "open1" in genomicinterpretations_dscps
-    assert "open2" in genomicinterpretations_dscps
     assert "controlled5" in genomicinterpretations_dscps
-    
-    """"
-    Make sure user4 has access to open1, open2, and controlled4 by id
-    """
-    for id in genomicinterpretations_ids:
-        response = helper_get_katsu_response(user4_token, f"{KATSU_URL}/api/genomicinterpretations/{id}")
-        assert response.status_code == 200
-        assert "id" in response.json().keys()
-
-def test_user4_genomicinterpretations_invalid(user4_token):
-    """
-    Make sure invalid token will not have access to datasets other than open datasets
-    """
-    invalid_token = 'A' + user4_token[1:]
-    response = helper_get_katsu_response(invalid_token, f"{KATSU_URL}/api/genomicinterpretations")
-    assert response.status_code == 200
-    response_json = response.json()
-    assert response_json["count"] == 2
-    genomicinterpretations_dscps = set()
-    for genomicinterpretation in response_json["results"]:
-        genomicinterpretations_dscps.add(genomicinterpretation["extra_properties"]["description"])
-    assert "open1" in genomicinterpretations_dscps
-    assert "open2" in genomicinterpretations_dscps
-    assert "controlled5" not in genomicinterpretations_dscps
+    assert "controlled6" in genomicinterpretations_dscps
