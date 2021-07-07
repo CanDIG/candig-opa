@@ -11,21 +11,21 @@ def post_data(url, data):
     return response.json()
 
 
-'''
-does a post request to /api/projects
-creates a project with the project title passed in
-returns the project id
-'''
 def get_project_id(project_title):
+    '''
+    does a post request to /api/projects
+    creates a project with the project title passed in
+    returns the project id
+    '''
     return post_data(f"{KATSU_URL}/api/projects", {"title": project_title, "description": "Project for tests"})["identifier"]
 
 
-'''
-does a post request to /api/dataset
-creates a dataset with the dataset title passed in under the project with the project id passed in
-returns the dataset id
-'''
 def get_dataset_id(dataset_title, project_id):
+    '''
+    does a post request to /api/dataset
+    creates a dataset with the dataset title passed in under the project with the project id passed in
+    returns the dataset id
+    '''
     dataset = {
         "title": "DATASET_TITLE",
         "data_use": {
@@ -55,11 +55,11 @@ def get_dataset_id(dataset_title, project_id):
     return post_data(f"{KATSU_URL}/api/datasets", dataset)["identifier"]
 
 
-'''
-does a post request to /api/table_ownership
-creates a table ownership between the table with the table id passed in and the dataset with the dataset id passed in
-'''
 def create_table_ownership(table_id, dataset_id):
+    '''
+    does a post request to /api/table_ownership
+    creates a table ownership between the table with the table id passed in and the dataset with the dataset id passed in
+    '''
     table_ownership = {
         "table_id": "TABLE_ID",
         "service_id": "service",
@@ -70,11 +70,11 @@ def create_table_ownership(table_id, dataset_id):
     post_data(f"{KATSU_URL}/api/table_ownership", table_ownership)
 
 
-'''
-does a post request to /api/tables
-creates a table with the table id passed in
-'''
 def create_table(table_id):
+    '''
+    does a post request to /api/tables
+    creates a table with the table id passed in
+    '''
     table = {
         "ownership_record": "TABLE_ID",
         "name": f"table{table_id}",
@@ -84,19 +84,19 @@ def create_table(table_id):
     post_data(f"{KATSU_URL}/api/tables", table)
 
 
-'''
-does a post request to /api/metadata
-creates a metadata object
-'''
 def get_meta_data_id():
+    '''
+    does a post request to /api/metadata
+    creates a metadata object
+    '''
     return post_data(f"{KATSU_URL}/api/metadata", {"created_by": "test"})["id"]
 
 
-'''
-does post request to /api/htsfiles
-creates a htsfile with the description passed in and with the uri http://{dataset_name}.com under the dataset with the dataset name passed in
-'''
 def create_htsfile(dataset_name, htsfile_description):
+    '''
+    does post request to /api/htsfiles
+    creates a htsfile with the description passed in and with the uri http://{dataset_name}.com under the dataset with the dataset name passed in
+    '''
     htsfile = {
         "uri": "http://link.com",
         "hts_format": "UNKNOWN",
@@ -108,12 +108,12 @@ def create_htsfile(dataset_name, htsfile_description):
     post_data(f"{KATSU_URL}/api/htsfiles", htsfile)
 
 
-'''
-returns a sample biosample json with the biosample id passed in
-the biosample object has procedure and sampled tissue field, 
-  so the procedure_code_id is used to fill in required fields in procedure and sampled tissue field
-'''
 def get_biosample(biosample_id, procedure_code_id):
+    '''
+    returns a sample biosample json with the biosample id passed in
+    the biosample object has procedure and sampled tissue field, 
+    so the procedure_code_id is used to fill in required fields in procedure and sampled tissue field
+    '''
     biosample = {
         "id": "BIOSAMPLE_ID",
         "procedure": {
@@ -133,11 +133,11 @@ def get_biosample(biosample_id, procedure_code_id):
     return biosample
 
 
-'''
-returns a sample disease json
-disease_term_id is used for the field required in disease object under term field
-'''
 def get_disease(disease_term_id):
+    '''
+    returns a sample disease json
+    disease_term_id is used for the field required in disease object under term field
+    '''
     disease = {
         "term": {
             "id": "DISEASE_ID",
@@ -148,10 +148,10 @@ def get_disease(disease_term_id):
     return disease
 
 
-'''
-returns a sample gene json with the gene id passed in
-'''
 def get_gene(gene_id):
+    '''
+    returns a sample gene json with the gene id passed in
+    '''
     gene = {
         "id": "GENE_ID",
         "symbol": "symbol"
@@ -160,10 +160,10 @@ def get_gene(gene_id):
     return gene
 
 
-'''
-returns a sample variant json with hgvsAllele type and variant_allele_hgvs for its required field under allele[“hgvs”]
-'''
 def get_variant(variant_allele_hgvs):
+    '''
+    returns a sample variant json with hgvsAllele type and variant_allele_hgvs for its required field under allele[“hgvs”]
+    '''
     variant = {
         "allele_type": "hgvsAllele",
         "allele": {
@@ -174,11 +174,11 @@ def get_variant(variant_allele_hgvs):
     return variant
 
 
-'''
-returns a sample genomic interpretation json with extra_properties description as passed in 
-and related to gene and variant with the id passed in
-'''
 def get_genomic_interpretation(extra_properties_description, gene_id, variant_id):
+    '''
+    returns a sample genomic interpretation json with extra_properties description as passed in 
+    and related to gene and variant with the id passed in
+    '''
     genomic_interpretation = {
         "status": "UNKNOWN",
         "gene": "GENE_ID",
@@ -192,11 +192,12 @@ def get_genomic_interpretation(extra_properties_description, gene_id, variant_id
     genomic_interpretation["extra_properties"]["description"] = extra_properties_description
     return genomic_interpretation
 
-'''
-returns a sample diagnosis interpretation json with extra_properties description as passed in and related to disease 
-and genomic interpretation with the id passed in
-'''
+
 def get_diagnosis(extra_properties_description, disease_id, genomic_interpretation_id):
+    '''
+    returns a sample diagnosis interpretation json with extra_properties description as passed in and related to disease 
+    and genomic interpretation with the id passed in
+    '''
     diagnosis = {
         "disease": 0,
         "genomic_interpretations": [
@@ -212,12 +213,12 @@ def get_diagnosis(extra_properties_description, disease_id, genomic_interpretati
     return diagnosis
 
 
-'''
-returns a sample phenotypic feature json
-phenotypic feature json contains a field with type with the type_id as its id field
-the phenotypic feature is related to the phenopacket with the phenopacket id passed in and the biosample with the biosample id passed in
-'''
 def get_phenotypicfeature(type_id, phenopacket_id, biosample_id):
+    '''
+    returns a sample phenotypic feature json
+    phenotypic feature json contains a field with type with the type_id as its id field
+    the phenotypic feature is related to the phenopacket with the phenopacket id passed in and the biosample with the biosample id passed in
+    '''
     phenotypicfeature = {
         "type": {
             "id": "PHENOTYPICFEATURE_ID",
@@ -232,14 +233,14 @@ def get_phenotypicfeature(type_id, phenopacket_id, biosample_id):
     return phenotypicfeature
 
 
-'''
-returns a sample phenopacket json
-the phenopacket json contains an id as the phenopacket_id passed in
-The phenopacket is related to the individual with the individual id passed in, 
-  the metadata with the metadata id passed in, the table with the table id passed in,
-  the biosample with the biosample id passed in, the variant with the variant id passed in and the disease with the disease id passed in
-'''
 def get_phenopacket(phenopacket_id, individual_id, meta_data_id, table_id, biosample_id, gene_id, variant_id, disease_id):
+    '''
+    returns a sample phenopacket json
+    the phenopacket json contains an id as the phenopacket_id passed in
+    The phenopacket is related to the individual with the individual id passed in, 
+        the metadata with the metadata id passed in, the table with the table id passed in,
+        the biosample with the biosample id passed in, the variant with the variant id passed in and the disease with the disease id passed in
+    '''
     phenopacket = {
         "id": "PHENOPACKET_ID",
         "subject": "INDIVIDUAL_ID",
@@ -261,13 +262,13 @@ def get_phenopacket(phenopacket_id, individual_id, meta_data_id, table_id, biosa
     return phenopacket
 
 
-'''
-returns a sample interpretation id
-the interpretation id contains an id as the interpretation id passed in
-The interpretation will be related to the phenopacket with the phenopacket id passed in, 
-  the metadata with the metadata id passed in, and the diagnosis with the diagnosis id passed in
-'''
 def get_interpretation(interpretation_id, phenopacket_id, meta_data_id, diagnosis_id):
+    '''
+    returns a sample interpretation id
+    the interpretation id contains an id as the interpretation id passed in
+    The interpretation will be related to the phenopacket with the phenopacket id passed in, 
+    the metadata with the metadata id passed in, and the diagnosis with the diagnosis id passed in
+    '''
     interpretation = {
         "id": "INTERRPRETATION_ID",
         "phenopacket": "PHENOPACKET_ID",
@@ -281,10 +282,10 @@ def get_interpretation(interpretation_id, phenopacket_id, meta_data_id, diagnosi
     return interpretation
 
 
-'''
-creates sample data in dataset with name as dataset_name
-'''
 def create_sample_data(dataset_name, meta_data_id, individual_id, table_id):
+    '''
+    creates sample data in dataset with name as dataset_name
+    '''
 
     biosample_id = dataset_name
     biosample = get_biosample(biosample_id, biosample_id)
@@ -324,14 +325,14 @@ def create_sample_data(dataset_name, meta_data_id, individual_id, table_id):
     post_data(f"{KATSU_URL}/api/interpretations", interpretation)
 
 
-'''
-creates a project with the project_title passed in
-creates a meta data as it is required for creating some objects
-creates an individual as it is required for creating some objects
-creates datasets, tables and table ownerships 
-creates sample data in datasets
-'''
 def create_project_table_meta_data(project_title):
+    '''
+    creates a project with the project_title passed in
+    creates a meta data as it is required for creating some objects
+    creates an individual as it is required for creating some objects
+    creates datasets, tables and table ownerships 
+    creates sample data in datasets
+    '''
     project_id = get_project_id(project_title)
     meta_data_id = get_meta_data_id()
     post_data(f"{KATSU_URL}/api/individuals", {"id": "test_individual"})
