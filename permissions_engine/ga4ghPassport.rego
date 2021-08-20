@@ -1,5 +1,0 @@
-package ga4ghPassport
-
-import data.permissions.datasets
-
-tokenControlledAccessREMS=datasets

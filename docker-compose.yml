@@ -71,7 +71,6 @@ services:
       - ./permissions_engine/permissions.rego:/policy.rego
       - ./permissions_engine/idp.rego:/idp.rego
       - ./permissions_engine/authz.rego:/authz.rego
-      - ./permissions_engine/ga4ghPassport.rego:/ga4ghPassport.rego
       - ./permissions_engine/tls.crt:/public.crt
       - ./permissions_engine/tls.key:/private.key
       - ./permissions_engine/data.json:/data.json
@@ -96,7 +95,6 @@ services:
       - "/authz.rego"
       - "/policy.rego"
       - "/idp.rego"
-      - "/ga4ghPassport.rego"
       - "/data.json"
 
   db-katsu:
@@ -129,6 +127,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       CANDIG_OPA_URL: https://opa:8181
+      CANDIG_OPA_VERSION: rego_dev_playground
       ROOT_CA: /rootCA.crt
       PERMISSIONS_SECRET: my-secret-beacon-token
 volumes:

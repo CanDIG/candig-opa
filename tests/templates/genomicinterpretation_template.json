@@ -1,0 +1,8 @@
+{
+    "status": "UNKNOWN",
+    "gene": "GENE_ID",
+    "variant": "VARIANT_ID",
+    "extra_properties": {
+        "description": "PHENOPACKET_ID"
+    }
+}

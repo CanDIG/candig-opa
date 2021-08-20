@@ -1,0 +1,8 @@
+{
+    "type":{
+        "id": "PHENOTYPICFEATURE_ID",
+        "label":"phenotypicfeature label"
+    },
+    "phenopacket": "PHENOPACKET_ID",
+    "biosample": "BIOSAMPLE_ID"
+}
