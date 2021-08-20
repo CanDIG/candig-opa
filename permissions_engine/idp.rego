@@ -7,7 +7,7 @@ package idp
 
 env := opa.runtime().env
 rootCA := object.get(env, "ROOT_CA", "/rootCA.crt")
-audience := "account"
+audience := ["account", "portal"]
 key_sets = data.keys
 
 #
@@ -21,7 +21,7 @@ decode_verify_token_output = output{
             {                                                 # With the supplied constraints:
                 "cert": key_sets[iss],
                 "iss": iss,
-                "aud": audience
+                "aud": audience[_]
             }
     )
     valid = output[0]

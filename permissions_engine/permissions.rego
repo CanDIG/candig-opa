@@ -11,7 +11,8 @@ registered_datasets = ["registered3"]
 controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:sub for this rather than username
                           "user2": ["controlled5"],
                           "user3": ["controlled4", "controlled6"],
-                          "user4": ["controlled5"]}
+                          "user4": ["controlled5"],
+                          "jimli": ["mock1", "mock2", "1kgenome"]}
 opt_in_datasets = ["controlled4"]
 #
 # Provided: 
