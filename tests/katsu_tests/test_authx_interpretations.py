@@ -150,7 +150,7 @@ def user3_token():
     """
     Return the token for user3
     """
-    return helper_get_user_token("user3", "pass3", OIDC2_URL)
+    return helper_get_user_token("user3", "pass3", OIDC2_NAME)
 
 def test_user3_interpretation_by_id_access(user3_token):
     """"
@@ -220,7 +220,7 @@ def user4_token():
     """
     Return the token for user4
     """
-    return helper_get_user_token("user4", "pass4", OIDC2_URL)
+    return helper_get_user_token("user4", "pass4", OIDC2_NAME)
 
 def test_user4_interpretation_by_id_access(user4_token):
     """"
