@@ -1,6 +1,6 @@
+from test_helpers import helper_get_katsu_response
+from test_helpers import helper_get_user_token
 import pytest
-import requests
-import time
 
 """
 This test suite will cover the manual testsfor KATSU in README.md, ensuring that
@@ -10,26 +10,9 @@ authorization happens correctly
 - modified but live token
 """
 
-BEACON_URL="http://localhost:8000"
-LOGIN=f"{BEACON_URL}/login"
 KATSU_URL="http://localhost:8001"
-OIDC1_URL="https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect"
-OIDC2_URL="https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect"
-
-def helper_get_user_token(username, password, oidc_url=OIDC1_URL):
-    token_field = "access_token"
-
-    response = requests.get(f"{LOGIN}?username={username}&password={password}&oidc={oidc_url}")
-    assert response.status_code == 200
-
-    body = response.json()
-    assert token_field in body
-    return body[token_field]
-
-
-def helper_get_katsu_response(token, url):
-    response = requests.get(url, headers={"X-CANDIG-LOCAL-OIDC":f"\"{token}\""})
-    return response
+OIDC1_NAME="oidc1"
+OIDC2_NAME="oidc2"
 
 @pytest.fixture(scope="session")
 def user1_token():
@@ -167,7 +150,7 @@ def user3_token():
     """
     Return the token for user3
     """
-    return helper_get_user_token("user3", "pass3", OIDC2_URL)
+    return helper_get_user_token("user3", "pass3", OIDC2_NAME)
 
 def test_user3_biosample_by_id_access(user3_token):
     """"
@@ -237,7 +220,7 @@ def user4_token():
     """
     Return the token for user4
     """
-    return helper_get_user_token("user4", "pass4", OIDC2_URL)
+    return helper_get_user_token("user4", "pass4", OIDC2_NAME)
 
 def test_user4_biosample_by_id_access(user4_token):
     """"
