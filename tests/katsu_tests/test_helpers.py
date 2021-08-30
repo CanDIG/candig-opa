@@ -5,8 +5,8 @@ idp = os.getenv("IDP", "https://oidc1:8443/auth/realms/mockrealm/protocol/openid
 client_id = os.getenv("IDP_CLIENT_ID", "mock_login_client")
 client_secret = os.getenv("IDP_CLIENT_SECRET", "mock_login_secret")
 idp_map = {
-    "oidc1": "http://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect",
-    "oidc2": "http://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect"
+    "oidc1": "http://localhost:8080/auth/realms/mockrealm/protocol/openid-connect",
+    "oidc2": "http://localhost:8081/auth/realms/mockrealm/protocol/openid-connect"
 }
 
 def helper_get_user_token(username, password, oidc_name="oidc1"):
