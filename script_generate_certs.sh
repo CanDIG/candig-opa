@@ -16,6 +16,4 @@ expect "rootCA.key:"
 send "$password\r";
 expect "rootCA.key:"
 send "$password\r";
-expect "rootCA.key:"
-send "$password\r";
 interact

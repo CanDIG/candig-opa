@@ -25,9 +25,7 @@ Create a file in permission_engine:
 touch permissions_engine/data.json
 ```
 
-Once done, fire everything up - currently that's the IdP (Keycloak), permission engine (OPA), and fake_beacon, which
-plays role of a beacon here - triggering login and requesting permissions, and a shim between the fake_beacon and
-opa:
+Once done, fire everything up - currently that's the IdP (Keycloak), permission engine (OPA) and katsu(a data service)
 
 ```
 docker-compose up -d
@@ -45,72 +43,34 @@ That restarts the IdP and so will take 20 seconds or so.
 
 When keycloak is up and running (when `docker-compose logs oidc` shows `Admin console listening`), it should be ready to go.
 
+Then export environment variables for the keycloaks(OIDCs) later use in fetching keys:
+```
+export OIDC1="http://localhost:8080/auth/realms/mockrealm"
+export OIDC2="http://localhost:8081/auth/realms/mockrealm"
+export OIDC1_OPENCONNECT="http://localhost:8080/auth/realms/mockrealm/protocol/openid-connect"
+export OIDC2_OPENCONNECT="http://localhost:8081/auth/realms/mockrealm/protocol/openid-connect"
+```
+
 Then download certificate from the keycloak's jwk uri into `data.json ` under the directory `permissions_engine`.
 ```
 python3 permissions_engine/fetch_keys.py
 ```
 
-Restart OPA
+Restart OPA to update the jwks for permission verification
 ```
 docker-compose restart opa
 ```
 
+
 In addition to the policies defined in OPA (the permissions engine), OPA directly connects to the IdP's userinfo
 to validate the token.
-
-When everything is ready, you can "log in" to the fake beacon; it currenly returns the access token to you, which of course
-isn't realistic:
-
-```
-curl "http://localhost:8000/login?username=user1&password=pass1"
-
-```
 
 you can capture the tokens as:
 
 ```
-TOKEN1=$( curl "http://localhost:8000/login?username=user1&password=pass1" | jq .access_token | tr -d \" )
-TOKEN2=$( curl "http://localhost:8000/login?username=user2&password=pass2" | jq .access_token | tr -d \" )
+TOKEN1=$( python3 capture_token.py user1 pass1 oidc1 )
+TOKEN2=$( python3 capture_token.py user1 pass1 oidc1 )
 ```
-
-then you can have the beacon query the permissions server:
-
-```
-curl "http://localhost:8000/permissions?token=${TOKEN1}" | jq .
-curl "http://localhost:8000/permissions?token=${TOKEN2}" | jq .
-```
-
-Both users can access the open data sets, only trusted researcher `user1` can access the registered datset,
-and each can access their particular controlled dataset.
-
-You can query the permission for COUNT in case some datasets might opt in for COUNT permission to everyone with valid token:
-```
-curl "http://localhost:8000/permissions_count?token=${TOKEN1}" | jq .
-curl "http://localhost:8000/permissions_count?token=${TOKEN2}" | jq .
-```
-Both tokens can access open datasets and controlled4 dataset which opts in for COUNT permission.
-
-You can test a properly signed expired token and should only get the open datasets
-
-```
-curl "http://localhost:8000/permissions?token=$(cat expired_token)" | jq .
-```
-
-You can also capture tokens from the second keycloak by:  
-```
-TOKEN3=$( curl "http://localhost:8000/login?username=user3&password=pass3&oidc=https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect" | jq .access_token | tr -d \" )
-TOKEN4=$( curl "http://localhost:8000/login?username=user4&password=pass4&oidc=https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect" | jq .access_token | tr -d \" )
-```
-
-then you can query the permission server the same way:
-
-```
-curl "http://localhost:8000/permissions?token=${TOKEN3}" | jq .
-curl "http://localhost:8000/permissions?token=${TOKEN4}" | jq .
-```
-
-## Testing with fake_beacon and shim
-python3 -m pytest tests
 
 ## Testing with katsu
 Fill katsu with testing data by running: 
@@ -121,8 +81,8 @@ This script creates 6 datasets *name_i*(open1, open2, registered3, controlled4, 
 
 Capture tokens by running: 
 ```
-TOKEN1=$( curl "http://localhost:8000/login?username=user1&password=pass1" | jq .access_token | tr -d \" )
-TOKEN2=$( curl "http://localhost:8000/login?username=user2&password=pass2" | jq .access_token | tr -d \" )
+TOKEN1=$( python3 capture_token.py user1 pass1 oidc1 )
+TOKEN2=$( python3 capture_token.py user1 pass1 oidc1 )
 ```
 
 then you can have the beacon query the katsu server(currently only phenopackets endpoint protected):
@@ -137,8 +97,8 @@ User2 should have access to 3 datasets, open1, open2, and controlled4.
 You can also do the same thing for the second keycloak
 Capture tokens by running: 
 ```
-TOKEN3=$( curl "http://localhost:8000/login?username=user3&password=pass3&oidc=https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect" | jq .access_token | tr -d \" )
-TOKEN4=$( curl "http://localhost:8000/login?username=user4&password=pass4&oidc=https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect" | jq .access_token | tr -d \" )
+TOKEN3=$( python3 capture_token.py user3 pass3 oidc2 )
+TOKEN4=$( python3 capture_token.py user4 pass4 oidc2 )
 ```
 
 then you can have the beacon query the katsu server(currently only phenopackets endpoint protected):
