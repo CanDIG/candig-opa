@@ -1,8 +1,8 @@
 language: python
 
 env:
-  - OIDC1="http://localhost:8080/auth/realms/mockrealm/protocol/openid-connect"
-  - OIDC2="http://localhost:8081/auth/realms/mockrealm/protocol/openid-connect"
+  - OIDC1="http://localhost:8080/auth/realms/mockrealm"
+  - OIDC2="http://localhost:8081/auth/realms/mockrealm"
   - OIDC1_OPENCONNECT="http://localhost:8080/auth/realms/mockrealm/protocol/openid-connect"
   - OIDC2_OPENCONNECT="http://localhost:8081/auth/realms/mockrealm/protocol/openid-connect"
 services:
