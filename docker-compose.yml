@@ -68,7 +68,7 @@ services:
       - "/data.json"
 
   db-katsu:
-    image: postgres:latest
+    image: postgres:13
     container_name: db-katsu
     environment:
       POSTGRES_DB: metadata
