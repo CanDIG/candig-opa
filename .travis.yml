@@ -28,6 +28,8 @@ install:
 - ./oidc/config-oidc-service
 - ./script_wait_keycloak.sh
 - python3 permissions_engine/fetch_keys.py
+- docker-compose logs db-katsu
+- docker-compose logs katsu
 - python3 tests/create_katsu_test_datasets.py
 - docker-compose restart opa
 

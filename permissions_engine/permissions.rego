@@ -5,7 +5,7 @@ package permissions
 
 default datasets = []
 
-open_datasets = ["open1", "open2"]
+open_datasets = ["open1", "open2", "dataset_3", "testdset3"]
 registered_datasets = ["registered3"]
 
 controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:sub for this rather than username
@@ -18,7 +18,12 @@ opt_in_datasets = ["controlled4"]
 input_paths = ["/api/phenopackets/?.*", "/api/datasets/?.*", "/api/diagnoses/?.*", "/api/diseases/?.*",
                  "/api/genes/?.*", "/api/genomicinterpretations/?.*", "/api/htsfiles/?.*", "/api/individuals/?.*",
                  "/api/interpretations/?.*", "/api/metadata/?.*", "/api/phenopackets/?.*", "/api/phenotypicfeatures/?.*",
-                 "/api/procedures/?.*", "/api/variants/?.*", "/api/biosamples/?.*", "/api/overview"]
+                 "/api/procedures/?.*", "/api/variants/?.*", "/api/biosamples/?.*", "/api/overview",
+                 #mcode data models input paths
+                 "/api/mcodepackets/?.*", "/api/medicationstatements/?.*", "/api/cancerrelatedprocedures/?.*",
+                 "/api/tnmstaging/?.*", "/api/cancerconditions/?.*", "/api/labsvital/?.*", 
+                 "/api/genomicsreports/?.*", "/api/genomicregionsstudied/?.*", "/api/cancergeneticvariants/?.*",
+                 "/api/geneticspecimens/?.*"]
 
 #
 # Provided: 
