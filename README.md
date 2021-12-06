@@ -6,10 +6,10 @@
 
 ## Running
 
-Add katsu submodule to the current directory
+Add katsu submodule (and its own dependency submodules) to the current directory
 ```
 git pull
-git submodule update --init
+git submodule update --init --recursive
 ```
 
 Generate internal TLS certificates, self-signed by a root CA:
