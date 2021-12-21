@@ -75,7 +75,7 @@ TOKEN2=$( python3 capture_token.py user1 pass1 oidc1 )
 ## Testing with katsu
 Fill katsu with testing data by running: 
 ```
-./tests/test_setup.sh 
+python3 tests/create_katsu_test_datasets.py
 ```
 This script creates 6 datasets *name_i*(open1, open2, registered3, controlled4, controlled5, controlled6) with one phenopacket with id *pheno_i* in each one.
 
