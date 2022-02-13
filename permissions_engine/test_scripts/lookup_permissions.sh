@@ -13,3 +13,5 @@ curl -k "${OPAURL}" \
     -H "Content-Type: application/json" -H "Accept: application/json" \
     -H "Authorization: Bearer my-secret-root-token" \
     -d "{\"input\": {\"headers\": {\"X-Candig-Local-Oidc\": \"${token}\"}, \"body\": {\"method\": \"GET\", \"path\": \"/api/phenopackets\"}}}"
+
+echo ""
