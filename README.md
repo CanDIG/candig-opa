@@ -4,42 +4,58 @@
 
 ![Diagram showing interactions between services](./diagram.png)
 
+## Installing dependencies on ubuntu
+
+If you're going to be running this demo from scratch on ubuntu, you'll need to install a few things:
+
+```
+sudo apt-get update
+sudo apt install build-essential
+sudo apt install -y docker-compose python3-pip expect jq
+
+sudo pip3 install -r tests/requirements.txt
+
+sudo systemctl enable docker
+sudo usermod -aG docker ubuntu
+sudo chown $USER /var/run/docker.sock
+```
+
 ## Running
 
-Add katsu submodule (and its own dependency submodules) to the current directory
+### Creating all the necessary files
+
+First let's get the files we need - we'll add the katsu submodule (and its own dependency submodules) to the current directory
 ```
-git pull
 git submodule update --init --recursive
 ```
 
-Generate internal TLS certificates, self-signed by a root CA:
-
-```
-./generate-certs.sh
-```
-
-You'll be asked for a passphrase for the signing key and to validate it, and then asked for that key three times more.
-
-Create a file in permission_engine:
+And create a (temporarily empty) file in permission_engine:
 ```
 touch permissions_engine/data.json
 ```
 
-Once done, fire everything up - currently that's the IdP (Keycloak), permission engine (OPA) and katsu(a data service)
+Generate internal TLS certificates, self-signed by a root CA, for internal docker networking:
+```
+./script_generate_certs.sh fake_key
+```
+
+### Spinning up the services
+
+Once done, fire everything up - currently that's the two OIDC IdPs (Keycloak), permission engine (OPA) and katsu (a data service).
+OPA will fail out from this because the data.json file is empty - that's perfectly fine.
 
 ```
 docker-compose up -d
 ```
 
-Then create the realm and the users (user1 and user2), with user1 being a trusted researcher.
-In the OPA configuration, user1 has  access to controlled dataset #4, (and registered #3 since they are a trusted researcher)
-and user2 is has access to controlled dataset #5.
+Then in Keycloak, create the realm and the users (user1 & user2 on the first IdP, user3 & user4 on the second), each with different permissions.
+To do this, we need the keycloaks to be ready to connect to, which takes a long time, so we have a script that waits for them
 
 ```
- ./oidc/config-oidc-service
+./script_wait_keycloak.sh && ./oidc/config-oidc-service && ./script_wait_keycloak.sh
 ```
 
-That restarts the IdP and so will take 20 seconds or so.
+Amongst other things this restarts the IdPs and so will take 40 seconds or so.
 
 When keycloak is up and running (when `docker-compose logs oidc` shows `Admin console listening`), it should be ready to go.
 
@@ -51,16 +67,17 @@ export OIDC1_OPENCONNECT="http://localhost:8080/auth/realms/mockrealm/protocol/o
 export OIDC2_OPENCONNECT="http://localhost:8081/auth/realms/mockrealm/protocol/openid-connect"
 ```
 
-Then download certificate from the keycloak's jwk uri into `data.json ` under the directory `permissions_engine`.
+Finally, the permissions engine (OPA) will need the keys from the now-fully-operational keycloaks to verify signatures of
+tokens.  So query the keycloaks' jwk uri into `data.json ` under the directory `permissions_engine`.
+
 ```
 python3 permissions_engine/fetch_keys.py
 ```
 
-Restart OPA to update the jwks for permission verification
+And with that, restart OPA so that all 
 ```
 docker-compose restart opa
 ```
-
 
 In addition to the policies defined in OPA (the permissions engine), OPA directly connects to the IdP's userinfo
 to validate the token.
@@ -73,6 +90,7 @@ TOKEN2=$( python3 capture_token.py user2 pass2 oidc1 )
 ```
 
 ## Testing with katsu
+
 Fill katsu with testing data by running: 
 ```
 python3 tests/create_katsu_test_datasets.py
@@ -109,3 +127,19 @@ curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN4\"" 'localhost:8001/api/
 ```
 User3 should have access to 5 datasets, open1, open2, registered3, controlled4, controlled6.
 User4 should have access to 3 datasets, open1, open2, and controlled5. 
+
+You can query OPA directly with a script provided:
+
+```
+./permissions_engine/test_scripts/lookup_permissions.sh ${TOKEN2}
+
+{"result":["open1","open2","dataset_3","testdset3","controlled5"]}
+```
+
+
+From here you can run the tests to make sure everything works:
+
+```
+pytest tests/test_authx.py
+pytest tests/katsu_tests/
+```
