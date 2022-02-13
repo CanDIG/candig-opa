@@ -16,6 +16,12 @@ readonly SHIMURL=https://localhost:8180/permissions
 readonly KATSU_POSTGRES_DB=metadata
 readonly KATSU_POSTGRES_USER=admin
 readonly KATSU_POSTGRES_PASSWORD=admin
+
+export OIDC1="http://localhost:8080/auth/realms/mockrealm"
+export OIDC2="http://localhost:8081/auth/realms/mockrealm"
+export OIDC1_OPENCONNECT="http://localhost:8080/auth/realms/mockrealm/protocol/openid-connect"
+export OIDC2_OPENCONNECT="http://localhost:8081/auth/realms/mockrealm/protocol/openid-connect"
+
 export ADMIN ADMINPWD
 export USER USERPWD
 export CLIENT_LOGIN_ID CLIENT_LOGIN_SECRET
