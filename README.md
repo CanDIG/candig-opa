@@ -1,6 +1,6 @@
 # Rego Development Playground
 
-[![Build Status](https://travis-ci.com/CanDIG/rego_development_playground.svg?branch=main)](https://travis-ci.com/CanDIG/rego_development_playground)
+[![Build Status](https://app.travis-ci.com/CanDIG/rego_development_playground.svg?branch=main)](https://app.travis-ci.com/CanDIG/rego_development_playground)
 
 ![Diagram showing interactions between services](./diagram.png)
 
