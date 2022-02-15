@@ -132,7 +132,7 @@ sequenceDiagram
     user2->>keycloak: Get ID token (would normally go via _e.g._ Tyk)
     keycloak-->>user2: ID token for user2
     user2->>+katsu: Request data with ID token
-    katsu2->>opa: What datasets are allowed for user2 on this reququest?
+    katsu->>opa: What datasets are allowed for user2 on this reququest?
     opa->>katsu: open1, open2, dataset_3, testdset3, controlled5
     katsu->>+user2: Here's the data from allowed datases
 ```
