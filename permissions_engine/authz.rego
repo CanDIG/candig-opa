@@ -19,13 +19,13 @@ rights = {
 
 env := opa.runtime().env
 root_token := object.get(env, "CLIENT_SECRET_ROOT", "no_root_token")
-beacon_token := object.get(env, "CLIENT_SECRET_BEACON", "no_beacon_token")
+service_token := object.get(env, "CLIENT_SECRET_SERVICE", "no_service_token")
 
 tokens = {
     root_token : {
         "roles": ["admin"]
     },
-    beacon_token : {
+    service_token : {
         "roles": ["datasets", "tokenControlledAccessREMS"]
     }
 }
