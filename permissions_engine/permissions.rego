@@ -28,9 +28,9 @@ input_paths = ["/api/phenopackets/?.*", "/api/datasets/?.*", "/api/diagnoses/?.*
 #
 # Provided: 
 # input = {
-#     'token': user token (passed to /introspect and /userinfo)
-#     'method': method requested on beacon
-#     'path': path to request on beacon
+#     'token': user token 
+#     'method': method requested at data service
+#     'path': path to request at data service
 # }
 #
 
@@ -46,7 +46,7 @@ import data.idp.username
 default registered_allowed = []
 
 registered_allowed = registered_datasets {
-    valid_token                  # extant, valid token
+    valid_token         # extant, valid token
     trusted_researcher  # has claim we're using for registered access
 }
 
@@ -58,19 +58,6 @@ default controlled_allowed = []
 
 controlled_allowed = controlled_access_list[username]{
     valid_token                  # extant, valid token
-}
-
-#List of all allowed datasets for this request
-
-datasets = array.concat(array.concat(open_datasets, registered_allowed), controlled_allowed) {
-    input.method = "GET"                   # only allow GET requestst
-    input.path = ["beacon"]
-}
-
-datasets = array.concat(open_datasets, opt_in_datasets) {
-     valid_token == true
-     input.method = "GET"
-     input.path = ["counts"]
 }
 
 #
