@@ -95,7 +95,7 @@ TOKEN1=$( python3 capture_token.py user1 pass1 oidc1 )
 TOKEN2=$( python3 capture_token.py user1 pass1 oidc1 )
 ```
 
-then you can have the beacon query the katsu server(currently only phenopackets endpoint protected):
+then you can query katsu and see what datasets you get back:
 
 ```
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN1\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
@@ -111,7 +111,7 @@ TOKEN3=$( python3 capture_token.py user3 pass3 oidc2 )
 TOKEN4=$( python3 capture_token.py user4 pass4 oidc2 )
 ```
 
-then you can have the beacon query the katsu server(currently only phenopackets endpoint protected):
+then you can query katsu and see what datasets you get back:
 
 ```
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN3\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
