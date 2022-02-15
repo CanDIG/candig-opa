@@ -10,14 +10,14 @@ If you're going to be running this demo from scratch on ubuntu, you'll need to i
 
 ```
 sudo apt-get update
-sudo apt install build-essential
+sudo apt install -y build-essential
 sudo apt install -y docker-compose python3-pip expect jq
-
-sudo pip3 install -r tests/requirements.txt
 
 sudo systemctl enable docker
 sudo usermod -aG docker ubuntu
 sudo chown $USER /var/run/docker.sock
+
+sudo pip3 install -r tests/requirements.txt
 ```
 
 ## Running
@@ -74,27 +74,19 @@ tokens.  So query the keycloaks' jwk uri into `data.json ` under the directory `
 python3 permissions_engine/fetch_keys.py
 ```
 
-And with that, restart OPA so that all 
+And with that, restart OPA so it sees the file (you can do this via OPA APIs too)
 ```
 docker-compose restart opa
 ```
 
-In addition to the policies defined in OPA (the permissions engine), OPA directly connects to the IdP's userinfo
-to validate the token.
-
-you can capture the tokens as:
-
+Finally, fill katsu with testing data by running: 
 ```
-TOKEN1=$( python3 capture_token.py user1 pass1 oidc1 )
-TOKEN2=$( python3 capture_token.py user2 pass2 oidc1 )
+python3 tests/create_katsu_test_datasets.py
 ```
 
 ## Testing with katsu
 
-Fill katsu with testing data by running: 
-```
-python3 tests/create_katsu_test_datasets.py
-```
+
 This script creates 6 datasets *name_i*(open1, open2, registered3, controlled4, controlled5, controlled6) with one phenopacket with id *pheno_i* in each one.
 
 Capture tokens by running: 
@@ -126,16 +118,36 @@ curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN3\"" 'localhost:8001/api/
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN4\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
 ```
 User3 should have access to 5 datasets, open1, open2, registered3, controlled4, controlled6.
-User4 should have access to 3 datasets, open1, open2, and controlled5. 
+User4 should have access to 3 datasets, open1, open2, and controlled5.
 
-You can query OPA directly with a script provided:
+What's happening here is as described below
+
+```mermaid
+sequenceDiagram
+    participant user2
+    participant keycloak
+    participant katsu
+    participant opa
+
+    user2->>keycloak: Get ID token (would normally go via _e.g._ Tyk)
+    keycloak-->>user2: ID token for user2
+    user2->>+katsu: Request data with ID token
+    katsu2->>opa: What datasets are allowed for user2 on this reququest?
+    opa->>katsu: open1, open2, dataset_3, testdset3, controlled5
+    katsu->>+user2: Here's the data from allowed datases
+```
+
+
+You can also query OPA directly with a script provided:
 
 ```
 ./permissions_engine/test_scripts/lookup_permissions.sh ${TOKEN2}
-
-{"result":["open1","open2","dataset_3","testdset3","controlled5"]}
 ```
 
+And you should get the result:
+```
+{"result":["open1","open2","dataset_3","testdset3","controlled5"]}
+```
 
 From here you can run the tests to make sure everything works:
 
