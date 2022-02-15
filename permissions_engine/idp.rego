@@ -5,8 +5,6 @@ package idp
 # Configuration
 #
 
-env := opa.runtime().env
-rootCA := object.get(env, "ROOT_CA", "/rootCA.crt")
 audience := ["account", "portal"]
 key_sets = data.keys
 
