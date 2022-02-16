@@ -44,12 +44,7 @@ services:
       - ./permissions_engine/tls.crt:/public.crt
       - ./permissions_engine/tls.key:/private.key
       - ./permissions_engine/data.json:/data.json
-      - ./rootCA.crt:/rootCA.crt
     environment:
-      IDP: https://oidc1:8443/auth/realms/mockrealm/ https://oidc2:8443/auth/realms/mockrealm/
-      ROOT_CA: /rootCA.crt
-      IDP_CLIENT_ID: mock_permissions_client
-      IDP_CLIENT_SECRET: mockpermissions_secret
       CLIENT_SECRET_ROOT: my-secret-root-token
       CLIENT_SECRET_SERVICE: my-secret-service-token
     command:
