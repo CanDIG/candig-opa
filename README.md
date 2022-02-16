@@ -92,7 +92,7 @@ This script creates 6 datasets *name_i*(open1, open2, registered3, controlled4, 
 Capture tokens by running: 
 ```
 TOKEN1=$( python3 capture_token.py user1 pass1 oidc1 )
-TOKEN2=$( python3 capture_token.py user1 pass1 oidc1 )
+TOKEN2=$( python3 capture_token.py user2 pass2 oidc1 )
 ```
 
 then you can query katsu and see what datasets you get back:
