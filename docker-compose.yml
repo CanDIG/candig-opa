@@ -44,7 +44,6 @@ services:
       - ./permissions_engine/tls.crt:/public.crt
       - ./permissions_engine/tls.key:/private.key
       - ./permissions_engine/data.json:/data.json
-      - ./rootCA.crt:/rootCA.crt
     environment:
       CLIENT_SECRET_ROOT: my-secret-root-token
       CLIENT_SECRET_SERVICE: my-secret-service-token
