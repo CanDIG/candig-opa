@@ -1,16 +1,14 @@
 import requests
 import os
 import sys
-IDP1_OPENCONNECT = os.getenv("OIDC1_OPENCONNECT", "https://oidc1:8443/auth/realms/mockrealm/protocol/openid-connect")
-IDP2_OPENCONNECT = os.getenv("OIDC2_OPENCONNECT", "https://oidc2:8443/auth/realms/mockrealm/protocol/openid-connect")
+IDP_OPENCONNECT = os.getenv("IDP") + "/protocol/openid-connect"
 client_id = os.getenv("IDP_CLIENT_ID", "mock_login_client")
 client_secret = os.getenv("IDP_CLIENT_SECRET", "mock_login_secret")
 idp_map = {
-    "oidc1": IDP1_OPENCONNECT,
-    "oidc2": IDP2_OPENCONNECT
+    "oidc": IDP_OPENCONNECT
 }
 
-def helper_get_user_token(username, password, oidc_name="oidc1"):
+def helper_get_user_token(username, password, oidc_name="oidc"):
     oidc = idp_map[oidc_name]
     payload = {'grant_type': 'password',
                'username': username,

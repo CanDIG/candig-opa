@@ -1,8 +1,8 @@
 import requests
 import io
+import os
 
-
-KATSU_URL = "http://localhost:8001"
+KATSU_URL = os.getenv("KATSU_URL")
 
 
 def post_data(url, data):
@@ -17,7 +17,12 @@ def get_project_id(project_title):
     creates a project with the project title passed in
     returns the project id
     '''
-    return post_data(f"{KATSU_URL}/api/projects", {"title": project_title, "description": "Project for tests"})["identifier"]
+    projects = requests.get(f"{KATSU_URL}/api/projects").json()["results"]
+    for project in projects:
+        if project["title"] == project_title:
+            return project["identifier"]
+    result = post_data(f"{KATSU_URL}/api/projects", {"title": project_title, "description": "Project for tests"})
+    return result["identifier"]
 
 
 def get_dataset_id(dataset_title, project_id):
@@ -26,6 +31,10 @@ def get_dataset_id(dataset_title, project_id):
     creates a dataset with the dataset title passed in under the project with the project id passed in
     returns the dataset id
     '''
+    datasets = requests.get(f"{KATSU_URL}/api/projects/{project_id}").json()["datasets"]
+    for dataset in datasets:
+        if dataset["title"] == dataset_title:
+            return dataset["identifier"]
     dataset = {
         "title": "DATASET_TITLE",
         "data_use": {
