@@ -8,10 +8,9 @@ then
     exit -1
 fi
 
-source config.sh
-curl -k "${OPAURL}" \
+curl -X "POST" "${OPA_URL}/v1/data/permissions/datasets" \
     -H "Content-Type: application/json" -H "Accept: application/json" \
     -H "Authorization: Bearer my-secret-root-token" \
-    -d "{\"input\": {\"headers\": {\"X-Candig-Local-Oidc\": \"${token}\"}, \"body\": {\"method\": \"GET\", \"path\": \"/api/phenopackets\"}}}"
+    -d "{ \"input\": { \"token\": \"${token}\", \"body\": { \"method\": \"GET\", \"path\": \"/api/phenopackets\" } } } "
 
 echo ""

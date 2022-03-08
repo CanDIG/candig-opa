@@ -11,7 +11,8 @@ RUN apk update
 RUN apk add --no-cache \
 	bash \
 	expect \
-	jq
+	jq \
+	curl
 
 COPY ./ /app/
 
