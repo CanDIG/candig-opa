@@ -1,12 +1,19 @@
 import requests
 import os
 import sys
+
+
 IDP_OPENCONNECT = os.getenv("IDP") + "/protocol/openid-connect"
-client_id = os.getenv("IDP_CLIENT_ID", "mock_login_client")
-client_secret = os.getenv("IDP_CLIENT_SECRET", "mock_login_secret")
 idp_map = {
     "oidc": IDP_OPENCONNECT
 }
+
+client_id = os.getenv("IDP_CLIENT_ID")
+
+client_secret = os.getenv("IDP_CLIENT_SECRET")
+if client_secret is None:
+    with open("/run/secrets/idp_client_secret", "r") as f:
+        client_secret = f.read().strip()
 
 def helper_get_user_token(username, password, oidc_name="oidc"):
     oidc = idp_map[oidc_name]
@@ -18,4 +25,5 @@ def helper_get_user_token(username, password, oidc_name="oidc"):
     token = response.json()['access_token']
     return token
 
-print(helper_get_user_token(sys.argv[1], sys.argv[2], sys.argv[3]))
+if __name__ == '__main__':
+    print(helper_get_user_token(sys.argv[1], sys.argv[2], sys.argv[3]))

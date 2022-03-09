@@ -7,8 +7,8 @@ This script creates 6 datasets *name_i*(open1, open2, registered3, controlled4, 
 
 Capture tokens by running: 
 ```
-TOKEN1=$( python3 capture_token.py user1 pass1 oidc1 )
-TOKEN2=$( python3 capture_token.py user1 pass1 oidc1 )
+TOKEN1=$( python3 ./tests/capture_token.py user1 pass1 oidc1 )
+TOKEN2=$( python3 ./tests/capture_token.py user1 pass1 oidc1 )
 ```
 
 then you can query katsu and see what datasets you get back:
@@ -23,8 +23,8 @@ User2 should have access to 3 datasets, open1, open2, and controlled4.
 You can also do the same thing for the second keycloak
 Capture tokens by running: 
 ```
-TOKEN3=$( python3 capture_token.py user3 pass3 oidc2 )
-TOKEN4=$( python3 capture_token.py user4 pass4 oidc2 )
+TOKEN3=$( python3 ./tests/capture_token.py user3 pass3 oidc2 )
+TOKEN4=$( python3 ./tests/capture_token.py user4 pass4 oidc2 )
 ```
 
 then you can query katsu and see what datasets you get back:
@@ -57,7 +57,7 @@ sequenceDiagram
 You can also query OPA directly with a script provided:
 
 ```
-./permissions_engine/test_scripts/lookup_permissions.sh ${TOKEN2}
+python3 ./tests/lookup_permissions.py ${TOKEN2}
 ```
 
 And you should get the result:
