@@ -5,7 +5,7 @@ package idp
 # Configuration
 #
 
-audience := ["account", "portal"]
+audience := ["account", "portal", "CLIENT_ID"]
 key_sets = data.keys
 
 #
@@ -13,9 +13,8 @@ key_sets = data.keys
 #
 decode_verify_token_output = output{
 	some iss
-    some x
     output:=io.jwt.decode_verify(     # Decode and verify in one-step
-            input.headers[x],
+            input.token,
             {                                                 # With the supplied constraints:
                 "cert": key_sets[iss],
                 "iss": iss,

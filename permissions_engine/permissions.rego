@@ -9,6 +9,7 @@ open_datasets = ["open1", "open2", "dataset_3", "testdset3"]
 registered_datasets = ["registered3"]
 
 controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:sub for this rather than username
+                          "user": ["controlled4"],
                           "user2": ["controlled5"],
                           "user3": ["controlled4", "controlled6"],
                           "user4": ["controlled5"],
