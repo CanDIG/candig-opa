@@ -5,7 +5,7 @@ package idp
 # Configuration
 #
 
-audience := ["account", "portal", "local_candig"]
+audience := ["account", "portal", "CLIENT_ID"]
 key_sets = data.keys
 
 #
