@@ -20,21 +20,6 @@ curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN2\"" 'localhost:8001/api/
 User1 should have access to 4 datasets, open1, open2, registered3 and controlled4. 
 User2 should have access to 3 datasets, open1, open2, and controlled4. 
 
-You can also do the same thing for the second keycloak
-Capture tokens by running: 
-```
-TOKEN3=$( python3 ./tests/capture_token.py user3 pass3 oidc2 )
-TOKEN4=$( python3 ./tests/capture_token.py user4 pass4 oidc2 )
-```
-
-then you can query katsu and see what datasets you get back:
-
-```
-curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN3\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
-curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN4\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
-```
-User3 should have access to 5 datasets, open1, open2, registered3, controlled4, controlled6.
-User4 should have access to 3 datasets, open1, open2, and controlled5.
 
 What's happening here is as described below
 
