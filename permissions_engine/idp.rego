@@ -18,7 +18,7 @@ decode_verify_token_output = output{
             {                                                 # With the supplied constraints:
                 "cert": key_sets[iss],
                 "iss": iss,
-                "aud": audience[_]
+                "aud": audience[2]
             }
     )
     valid = output[0]
