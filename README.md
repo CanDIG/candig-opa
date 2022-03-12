@@ -1,4 +1,4 @@
-# Rego Development Playground
+# Open Policy Agent for CanDIGv2
 
 ## Testing with katsu
 
@@ -8,7 +8,7 @@ This script creates 6 datasets *name_i*(open1, open2, registered3, controlled4, 
 Capture tokens by running: 
 ```
 TOKEN1=$( python3 ./tests/capture_token.py user1 pass1 oidc1 )
-TOKEN2=$( python3 ./tests/capture_token.py user1 pass1 oidc1 )
+TOKEN2=$( python3 ./tests/capture_token.py user2 pass2 oidc1 )
 ```
 
 then you can query katsu and see what datasets you get back:
@@ -18,7 +18,7 @@ curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN1\"" 'localhost:8001/api/
 curl --insecure -XGET -H "X-CANDIG-LOCAL-OIDC: \"$TOKEN2\"" 'localhost:8001/api/phenopackets'|jq '.results'|jq '[.[] | {id: .id}]'
 ```
 User1 should have access to 4 datasets, open1, open2, registered3 and controlled4. 
-User2 should have access to 3 datasets, open1, open2, and controlled4. 
+User2 should have access to 3 datasets, open1, open2, and controlled5. 
 
 
 What's happening here is as described below
