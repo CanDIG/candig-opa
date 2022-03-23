@@ -5,16 +5,11 @@ package permissions
 
 default datasets = []
 
-open_datasets = ["open1", "open2", "dataset_3", "testdset3"]
-registered_datasets = ["registered3"]
+open_datasets = data.access.open_datasets
+registered_datasets = data.access.registered_datasets
 
-controlled_access_list = {"user1": ["controlled4"],    # TODO - should use iss:sub for this rather than username
-                          "user": ["controlled4"],
-                          "user2": ["controlled5"],
-                          "user3": ["controlled4", "controlled6"],
-                          "user4": ["controlled5"],
-                          "jimli": ["mock1", "mock2", "1kgenome"]}
-opt_in_datasets = ["controlled4"]
+controlled_access_list = data.access.controlled_access_list
+opt_in_datasets = data.access.opt_in_datasets
 
 input_paths = ["/api/phenopackets/?.*", "/api/datasets/?.*", "/api/diagnoses/?.*", "/api/diseases/?.*",
                  "/api/genes/?.*", "/api/genomicinterpretations/?.*", "/api/htsfiles/?.*", "/api/individuals/?.*",

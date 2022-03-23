@@ -1,0 +1,38 @@
+{
+    "access": {
+        "open_datasets": [
+            "open1",
+            "open2",
+            "dataset_3"
+        ],
+        "registered_datasets": [
+            "registered3"
+        ],
+        "controlled_access_list": {
+            "user1": [
+                "controlled4"
+            ],
+            "user": [
+                "controlled4"
+            ],
+            "user2": [
+                "controlled5"
+            ],
+            "user3": [
+                "controlled4",
+                "controlled6"
+            ],
+            "user4": [
+                "controlled5"
+            ],
+            "jimli": [
+                "mock1",
+                "mock2",
+                "1kgenome"
+            ]
+        },
+        "opt_in_datasets": [
+            "controlled4"
+        ]
+    }
+}
