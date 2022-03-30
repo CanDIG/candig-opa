@@ -10,11 +10,11 @@
         ],
         "controlled_access_list": {
             "user1": [
-                "controlled4"
-            ],
-            "user": [
                 "controlled4",
                 "mock1"
+            ],
+            "user": [
+                "controlled4"
             ],
             "user2": [
                 "controlled5"
