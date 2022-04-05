@@ -1,0 +1,50 @@
+{
+    "paths": {
+        "katsu": [
+            "/api/phenopackets/?.*",
+            "/api/datasets/?.*",
+            "/api/diagnoses/?.*",
+            "/api/diseases/?.*",
+            "/api/genes/?.*",
+            "/api/genomicinterpretations/?.*",
+            "/api/htsfiles/?.*",
+            "/api/individuals/?.*",
+            "/api/interpretations/?.*",
+            "/api/metadata/?.*",
+            "/api/phenopackets/?.*",
+            "/api/phenotypicfeatures/?.*",
+            "/api/procedures/?.*",
+            "/api/variants/?.*",
+            "/api/biosamples/?.*",
+            "/api/overview",
+            "/api/mcodepackets/?.*",
+            "/api/medicationstatements/?.*",
+            "/api/cancerrelatedprocedures/?.*",
+            "/api/tnmstaging/?.*",
+            "/api/cancerconditions/?.*",
+            "/api/labsvital/?.*",
+            "/api/genomicsreports/?.*",
+            "/api/genomicregionsstudied/?.*",
+            "/api/cancergeneticvariants/?.*",
+            "/api/geneticspecimens/?.*"
+        ],
+        "htsget": [
+            "/htsget/v1/variants/?.*",
+            "/htsget/v1/reads/?.*",
+            "/ga4gh/drs/v1/objects/?.*"
+        ],
+        "candigv1": [
+            "/patients/search/?.*",
+            "/datasets/search/?.*",
+            "/count/?.*",
+            "/variants/search/?.*",
+            "/variants/beacon/range/search/?.*",
+            "/variants/beacon/allele/freq/search/?.*",
+            "/variantsets/search/?.*",
+            "/readgroupsets/search/?.*",
+            "/featuresets/search/?.*",
+            "/reads/search/?.*",
+            "/referencesets/?.*"
+        ]
+	}
+}

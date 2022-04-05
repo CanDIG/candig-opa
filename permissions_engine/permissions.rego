@@ -11,15 +11,7 @@ registered_datasets = data.access.registered_datasets
 controlled_access_list = data.access.controlled_access_list
 opt_in_datasets = data.access.opt_in_datasets
 
-input_paths = ["/api/phenopackets/?.*", "/api/datasets/?.*", "/api/diagnoses/?.*", "/api/diseases/?.*",
-                 "/api/genes/?.*", "/api/genomicinterpretations/?.*", "/api/htsfiles/?.*", "/api/individuals/?.*",
-                 "/api/interpretations/?.*", "/api/metadata/?.*", "/api/phenopackets/?.*", "/api/phenotypicfeatures/?.*",
-                 "/api/procedures/?.*", "/api/variants/?.*", "/api/biosamples/?.*", "/api/overview",
-                 #mcode data models input paths
-                 "/api/mcodepackets/?.*", "/api/medicationstatements/?.*", "/api/cancerrelatedprocedures/?.*",
-                 "/api/tnmstaging/?.*", "/api/cancerconditions/?.*", "/api/labsvital/?.*", 
-                 "/api/genomicsreports/?.*", "/api/genomicregionsstudied/?.*", "/api/cancergeneticvariants/?.*",
-                 "/api/geneticspecimens/?.*"]
+input_paths = array.concat(array.concat(data.paths.katsu, data.paths.htsget), data.paths.candigv1)
 
 #
 # Provided: 
@@ -63,7 +55,7 @@ controlled_allowed = controlled_access_list[username]{
 # allowed datasets
 datasets = array.concat(array.concat(open_datasets, registered_allowed), controlled_allowed) 
 {
-    input.body.method = "GET"                   # only allow GET requestst
+    input.body.method = "GET"                   # only allow GET requests
     regex.match(input_paths[_], input.body.path) == true
 }
 
