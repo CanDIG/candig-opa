@@ -14,8 +14,6 @@ decode_verify_token_output = output{
                 "aud": "CLIENT_ID"
             }
     )
-    valid = output[0]
-    valid == true
 }
 
 #
