@@ -49,3 +49,19 @@ identity_rights[right] {             # Right is in the identity_rights set if...
     role := token.roles[_]           # Token has a role, and...
     right := rights[role]            # Role has rights defined.
 }
+
+allow {
+    decode_verify_token_output[2].OPA_SITE_ADMIN_KEY
+}
+
+decode_verify_token_output = output{
+    some i
+    output:=io.jwt.decode_verify(     # Decode and verify in one-step
+            input.identity,
+            {                         # With the supplied constraints:
+                "cert": data.keys[i].cert,
+                "iss": data.keys[i].iss,
+                "aud": "CLIENT_ID"
+            }
+    )
+}
