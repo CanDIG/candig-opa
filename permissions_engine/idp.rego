@@ -2,27 +2,18 @@ package idp
 # for interacting with the IdP
 
 #
-# Configuration
-#
-
-audience := ["account", "portal", "CLIENT_ID"]
-key_sets = data.keys
-
-#
 # Store decode and verified token
 #
 decode_verify_token_output = output{
-	some iss
+	some i
     output:=io.jwt.decode_verify(     # Decode and verify in one-step
             input.token,
-            {                                                 # With the supplied constraints:
-                "cert": key_sets[iss],
-                "iss": iss,
-                "aud": audience[2]
+            {                         # With the supplied constraints:
+                "cert": data.keys[i].cert,
+                "iss": data.keys[i].iss,
+                "aud": "CLIENT_ID"
             }
     )
-    valid = output[0]
-    valid == true
 }
 
 #
@@ -38,6 +29,14 @@ valid_token = true {
 trusted_researcher = true {
     decode_verify_token_output[0]
     decode_verify_token_output[2].trusted_researcher == true        
+}
+
+#
+# Check OPA_SITE_ADMIN_KEY in the token payload
+#
+OPA_SITE_ADMIN_KEY = true {
+    decode_verify_token_output[0]
+    decode_verify_token_output[2].OPA_SITE_ADMIN_KEY == true        
 }
 
 username := decode_verify_token_output[2].preferred_username        # get username from the token payload

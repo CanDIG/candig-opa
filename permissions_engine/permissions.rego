@@ -5,12 +5,6 @@ package permissions
 
 default datasets = []
 
-open_datasets = data.access.open_datasets
-registered_datasets = data.access.registered_datasets
-
-controlled_access_list = data.access.controlled_access_list
-opt_in_datasets = data.access.opt_in_datasets
-
 input_paths = array.concat(array.concat(data.paths.katsu, data.paths.htsget), data.paths.candigv1)
 
 #
@@ -21,7 +15,6 @@ input_paths = array.concat(array.concat(data.paths.katsu, data.paths.htsget), da
 #     'path': path to request at data service
 # }
 #
-
 import data.idp.valid_token
 import data.idp.trusted_researcher
 import data.idp.username
@@ -33,7 +26,7 @@ import data.idp.username
 
 default registered_allowed = []
 
-registered_allowed = registered_datasets {
+registered_allowed = data.access.registered_datasets {
     valid_token         # extant, valid token
     trusted_researcher  # has claim we're using for registered access
 }
@@ -44,7 +37,7 @@ registered_allowed = registered_datasets {
 
 default controlled_allowed = []
 
-controlled_allowed = controlled_access_list[username]{
+controlled_allowed = data.access.controlled_access_list[username]{
     valid_token                  # extant, valid token
 }
 
@@ -53,14 +46,14 @@ controlled_allowed = controlled_access_list[username]{
 #
 
 # allowed datasets
-datasets = array.concat(array.concat(open_datasets, registered_allowed), controlled_allowed) 
+datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed) 
 {
     input.body.method = "GET"                   # only allow GET requests
     regex.match(input_paths[_], input.body.path) == true
 }
 
 # allowed datasets for counting
-datasets = array.concat(open_datasets, opt_in_datasets) {
+datasets = array.concat(data.access.open_datasets, data.access.opt_in_datasets) {
     valid_token == true
     input.method = "GET"
     regex.match(input_paths[_], input.body.path) == true
