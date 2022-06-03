@@ -28,7 +28,7 @@ valid_token = true {
 #
 trusted_researcher = true {
     decode_verify_token_output[0]
-    decode_verify_token_output[2].trusted_researcher == true        
+    decode_verify_token_output[2].trusted_researcher == "true"
 }
 
 #
@@ -36,7 +36,7 @@ trusted_researcher = true {
 #
 OPA_SITE_ADMIN_KEY = true {
     decode_verify_token_output[0]
-    decode_verify_token_output[2].OPA_SITE_ADMIN_KEY == true        
+    decode_verify_token_output[2].OPA_SITE_ADMIN_KEY == "true"
 }
 
 username := decode_verify_token_output[2].preferred_username        # get username from the token payload
