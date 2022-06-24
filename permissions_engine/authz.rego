@@ -15,7 +15,7 @@ rights = {
     }
 }
 
-# Tokens provided asn env variables
+# Tokens provided as env variables
 
 env := opa.runtime().env
 root_token := object.get(env, "CLIENT_SECRET_ROOT", "no_root_token")
@@ -58,7 +58,8 @@ allow {
 
 # If token payload has OPA_SITE_ADMIN_KEY in it, allow always
 allow {
-    decode_verify_token_output[2].OPA_SITE_ADMIN_KEY
+    some i
+    decode_verify_token_output[2].realm_access.roles[i] == "OPA_SITE_ADMIN_KEY"
 }
 
 decode_verify_token_output = output{

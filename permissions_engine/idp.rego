@@ -36,7 +36,8 @@ trusted_researcher = true {
 #
 OPA_SITE_ADMIN_KEY = true {
     decode_verify_token_output[0]
-    decode_verify_token_output[2].OPA_SITE_ADMIN_KEY == "true"
+    some i
+    decode_verify_token_output[2].realm_access.roles[i] == "OPA_SITE_ADMIN_KEY"
 }
 
 username := decode_verify_token_output[2].preferred_username        # get username from the token payload
