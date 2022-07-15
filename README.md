@@ -1,5 +1,7 @@
 # Open Policy Agent for CanDIGv2
 
+This is the implementation of [OPA](https://www.openpolicyagent.org/) for CanDIGv2. The OPA service provides a unified policy engine across CanDIG services.  
+
 ## Testing with katsu
 
 
