@@ -18,8 +18,8 @@ rights = {
 # Tokens provided as env variables
 
 env := opa.runtime().env
-root_token := object.get(env, "CLIENT_SECRET_ROOT", "no_root_token")
-service_token := object.get(env, "CLIENT_SECRET_SERVICE", "no_service_token")
+root_token := OPA_ROOT_TOKEN
+service_token := OPA_SECRET_TOKEN
 
 tokens = {
     root_token : {
