@@ -15,17 +15,11 @@ rights = {
     }
 }
 
-# Tokens provided as env variables
-
-env := opa.runtime().env
-root_token := OPA_ROOT_TOKEN
-service_token := OPA_SECRET_TOKEN
-
 tokens = {
-    root_token : {
+    "OPA_ROOT_TOKEN" : {
         "roles": ["admin"]
     },
-    service_token : {
+    "OPA_SECRET_TOKEN" : {
         "roles": ["datasets", "tokenControlledAccessREMS"]
     }
 }
