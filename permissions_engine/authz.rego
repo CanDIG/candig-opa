@@ -15,11 +15,14 @@ rights = {
     }
 }
 
+root_token := "OPA_ROOT_TOKEN"
+service_token := "OPA_SERVICE_TOKEN"
+
 tokens = {
-    "OPA_ROOT_TOKEN" : {
+    root_token : {
         "roles": ["admin"]
     },
-    "OPA_SECRET_TOKEN" : {
+    service_token : {
         "roles": ["datasets", "tokenControlledAccessREMS"]
     }
 }
