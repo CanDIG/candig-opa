@@ -10,10 +10,8 @@ idp_map = {
 
 client_id = os.getenv("IDP_CLIENT_ID")
 
-client_secret = os.getenv("IDP_CLIENT_SECRET")
-if client_secret is None:
-    with open("/run/secrets/idp_client_secret", "r") as f:
-        client_secret = f.read().strip()
+with open("/run/secrets/idp_client_secret", "r") as f:
+    client_secret = f.read().strip()
 
 def helper_get_user_token(username, password, oidc_name="oidc"):
     oidc = idp_map[oidc_name]
