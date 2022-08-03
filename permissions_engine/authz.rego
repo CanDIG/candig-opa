@@ -15,11 +15,8 @@ rights = {
     }
 }
 
-# Tokens provided as env variables
-
-env := opa.runtime().env
-root_token := object.get(env, "CLIENT_SECRET_ROOT", "no_root_token")
-service_token := object.get(env, "CLIENT_SECRET_SERVICE", "no_service_token")
+root_token := "OPA_ROOT_TOKEN"
+service_token := "OPA_SERVICE_TOKEN"
 
 tokens = {
     root_token : {
@@ -44,8 +41,10 @@ allow {                             # Allow request if...
     right.path == input.path        # Right.path matches input.path.
 }
 
+x_opa := input.headers["X-Opa"][_]
+
 identity_rights[right] {             # Right is in the identity_rights set if...
-    token := tokens[input.identity]  # Token exists for identity, and...
+    token := tokens[x_opa]  # Token exists for identity, and...
     role := token.roles[_]           # Token has a role, and...
     right := rights[role]            # Role has rights defined.
 }
