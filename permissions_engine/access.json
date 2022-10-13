@@ -2,8 +2,7 @@
     "access": {
         "open_datasets": [
             "open1",
-            "open2",
-            "dataset_3"
+            "open2"
         ],
         "registered_datasets": [
             "registered3"
