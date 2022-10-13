@@ -5,7 +5,8 @@ package permissions
 
 default datasets = []
 
-input_paths = array.concat(array.concat(data.paths.katsu, data.paths.htsget), data.paths.candigv1)
+get_input_paths = array.concat(array.concat(data.paths.get.katsu, data.paths.get.htsget), data.paths.get.candigv1)
+post_input_paths = array.concat(data.paths.post.katsu, data.paths.post.htsget)
 
 #
 # Provided: 
@@ -48,14 +49,20 @@ controlled_allowed = data.access.controlled_access_list[username]{
 # allowed datasets
 datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed) 
 {
-    input.body.method = "GET"                   # only allow GET requests
-    regex.match(input_paths[_], input.body.path) == true
+    input.body.method = "GET"
+    regex.match(get_input_paths[_], input.body.path) == true
+}
+
+datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed) 
+{
+    input.body.method = "POST"
+    regex.match(post_input_paths[_], input.body.path) == true
 }
 
 # allowed datasets for counting
 datasets = array.concat(data.access.open_datasets, data.access.opt_in_datasets) {
     valid_token == true
     input.method = "GET"
-    regex.match(input_paths[_], input.body.path) == true
+    regex.match(get_input_paths[_], input.body.path) == true
     input.query_type = "counts"
 }
