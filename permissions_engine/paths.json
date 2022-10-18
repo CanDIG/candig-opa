@@ -56,7 +56,8 @@
                 
             ],
             "htsget": [
-                "/htsget/v1/variants/search"
+                "/htsget/v1/variants/search",
+                "/htsget/v1/variants/?.*/index"
             ]
         }
     }
