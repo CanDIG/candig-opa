@@ -40,4 +40,4 @@ OPA_SITE_ADMIN_KEY = true {
     decode_verify_token_output[2].realm_access.roles[i] == "OPA_SITE_ADMIN_KEY"
 }
 
-username := decode_verify_token_output[2].preferred_username        # get username from the token payload
+email := decode_verify_token_output[2].email        # get email from the token payload

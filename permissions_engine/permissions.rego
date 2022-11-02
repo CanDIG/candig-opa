@@ -18,7 +18,7 @@ post_input_paths = array.concat(data.paths.post.katsu, data.paths.post.htsget)
 #
 import data.idp.valid_token
 import data.idp.trusted_researcher
-import data.idp.username
+import data.idp.email
 
 #
 # is registered access allowed?
@@ -38,7 +38,7 @@ registered_allowed = data.access.registered_datasets {
 
 default controlled_allowed = []
 
-controlled_allowed = data.access.controlled_access_list[username]{
+controlled_allowed = data.access.controlled_access_list[email]{
     valid_token                  # extant, valid token
 }
 
