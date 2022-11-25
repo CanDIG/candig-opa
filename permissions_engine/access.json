@@ -8,27 +8,12 @@
             "registered3"
         ],
         "controlled_access_list": {
-            "user1": [
+            "user1@test.ca": [
                 "controlled4",
                 "mock1"
             ],
-            "user": [
-                "controlled4"
-            ],
-            "user2": [
+            "user2@test.ca": [
                 "controlled5"
-            ],
-            "user3": [
-                "controlled4",
-                "controlled6"
-            ],
-            "user4": [
-                "controlled5"
-            ],
-            "jimli": [
-                "mock1",
-                "mock2",
-                "1kgenome"
             ]
         },
         "opt_in_datasets": [
