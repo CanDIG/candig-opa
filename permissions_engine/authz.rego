@@ -49,12 +49,6 @@ identity_rights[right] {             # Right is in the identity_rights set if...
     right := rights[role]            # Role has rights defined.
 }
 
-# If token is valid, allow only the datasets path
-allow {
-    decode_verify_token_output
-    input.path == rights["datasets"]["path"]
-}
-
 # If token payload has OPA_SITE_ADMIN_KEY in it, allow always
 allow {
     some i
