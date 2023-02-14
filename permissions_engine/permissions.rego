@@ -5,8 +5,8 @@ package permissions
 
 default datasets = []
 
-get_input_paths = array.concat(data.paths.get.katsu, data.paths.get.htsget)
-post_input_paths = array.concat(data.paths.post.katsu, data.paths.post.htsget)
+get_input_paths = data.paths.get
+post_input_paths = data.paths.post
 
 #
 # Provided: 
@@ -47,13 +47,13 @@ controlled_allowed = data.access.controlled_access_list[email]{
 #
 
 # allowed datasets
-datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed) 
+datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed)
 {
     input.body.method = "GET"
     regex.match(get_input_paths[_], input.body.path) == true
 }
 
-datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed) 
+datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed)
 {
     input.body.method = "POST"
     regex.match(post_input_paths[_], input.body.path) == true

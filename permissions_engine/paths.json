@@ -1,24 +1,17 @@
 {
     "paths": {
         "get": {
-            "katsu": [
-                "/api/v1/moh/?.*"
-            ],
-            "htsget": [
-                "/htsget/v1/variants/?.*",
-                "/htsget/v1/variants/search",
-                "/htsget/v1/variants/?.*/index",
-                "/htsget/v1/reads/?.*",
-                "/ga4gh/drs/v1/objects/?.*",
-                "/ga4gh/drs/v1/datasets/?.*"
-            ]
+            "/api/v1/moh/?.*",
+            "/htsget/v1/variants/?.*",
+            "/htsget/v1/variants/search",
+            "/htsget/v1/variants/?.*/index",
+            "/htsget/v1/reads/?.*",
+            "/ga4gh/drs/v1/objects/?.*",
+            "/ga4gh/drs/v1/datasets/?.*"
         },
         "post": {
-            "katsu": [],
-            "htsget": [
-                "/htsget/v1/variants/search",
-                "/htsget/v1/variants/?.*/index"
-            ]
+            "/htsget/v1/variants/search",
+            "/htsget/v1/variants/?.*/index"
         }
     }
 }
