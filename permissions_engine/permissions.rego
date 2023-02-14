@@ -5,7 +5,7 @@ package permissions
 
 default datasets = []
 
-get_input_paths = array.concat(array.concat(data.paths.get.katsu, data.paths.get.htsget), data.paths.get.candigv1)
+get_input_paths = array.concat(data.paths.get.katsu, data.paths.get.htsget)
 post_input_paths = array.concat(data.paths.post.katsu, data.paths.post.htsget)
 
 #
