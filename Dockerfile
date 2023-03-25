@@ -17,7 +17,7 @@ RUN apk add --no-cache \
 
 COPY ./ /app/
 
-RUN pip install --no-cache-dir -r app/tests/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 RUN touch initial_setup
 ENTRYPOINT ["bash", "/app/entrypoint.sh"]
