@@ -9,11 +9,11 @@
         ],
         "controlled_access_list": {
             "user1@test.ca": [
-                "controlled4",
+                "SYNTHETIC-1",
                 "mock1"
             ],
             "user2@test.ca": [
-                "controlled5"
+                "SYNTHETIC-2"
             ]
         },
         "opt_in_datasets": [

@@ -7,8 +7,8 @@ and returns the list of datasets authorized for that operation by that user.
 The actual permissions policies are written out in [permissions.rego](./permissions.rego).
 Any users can access the open datasets `open1` and `open2`; registered access users
 (here assessed by the existence of a `trusted researcher` claim in the userinfo)
-can access dataset `registered1`; and user1 can access controlled dataset `controlled4`
-while user2 can access `controlled5`.
+can access dataset `registered1`; and user1 can access controlled dataset `SYNTHETIC-1`
+while user2 can access `SYNTHETIC-2`.
 
 Interactions with the IdP are handled by rego code in [idp.rego](./idp.rego).  This fetches
 the appropriate endpoints from the IdP's `openid_configuration` service, then queries
