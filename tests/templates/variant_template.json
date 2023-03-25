@@ -1,6 +1,0 @@
-{
-    "allele_type": "hgvsAllele",
-    "allele": {
-        "hgvs": "variant for phenopacket with id PHENOPACKET_ID"
-    }
-}
