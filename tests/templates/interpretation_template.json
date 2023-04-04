@@ -1,6 +1,0 @@
-{
-    "id": "INTERRPRETATION_ID",
-    "phenopacket": "PHENOPACKET_ID",
-    "meta_data": 0,
-    "diagnosis": ["DIAGNOSIS_ID"]
-}
