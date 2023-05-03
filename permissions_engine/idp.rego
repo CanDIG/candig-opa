@@ -27,18 +27,14 @@ valid_token = true {
 # Check trusted_researcher in the token payload
 #
 trusted_researcher = true {
-    some i
-    decode_verify_token_output[i][0]
-    decode_verify_token_output[i][2].trusted_researcher == "true"
+    decode_verify_token_output[_][2].trusted_researcher == "true"
 }
 
 #
 # Check OPA_SITE_ADMIN_KEY in the token payload
 #
 OPA_SITE_ADMIN_KEY = true {
-    some i
-    decode_verify_token_output[i][0]
-    decode_verify_token_output[i][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
+    decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
 }
 
 email := decode_verify_token_output[_][2].email        # get email from the token payload

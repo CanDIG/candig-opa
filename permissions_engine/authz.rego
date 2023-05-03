@@ -51,8 +51,7 @@ identity_rights[right] {             # Right is in the identity_rights set if...
 
 # If token payload has OPA_SITE_ADMIN_KEY in it, allow always
 allow {
-    some i
-    decode_verify_token_output[_][2].realm_access.roles[i] == "OPA_SITE_ADMIN_KEY"
+    decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
 }
 
 decode_verify_token_output[issuer] := output {
