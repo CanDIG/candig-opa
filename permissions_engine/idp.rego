@@ -4,15 +4,15 @@ package idp
 #
 # Store decode and verified token
 #
-decode_verify_token_output = output{
-	some i
-    output:=io.jwt.decode_verify(     # Decode and verify in one-step
-            input.token,
-            {                         # With the supplied constraints:
-                "cert": data.keys[i].cert,
-                "iss": data.keys[i].iss,
-                "aud": "CLIENT_ID"
-            }
+decode_verify_token_output[issuer] := output {
+    some i
+    output := io.jwt.decode_verify(     # Decode and verify in one-step
+        input.token,
+        {                         # With the supplied constraints:
+            "cert": data.keys[i].cert,
+            "iss": data.keys[i].iss,
+            "aud": "CLIENT_ID"
+        }
     )
 }
 
@@ -20,24 +20,21 @@ decode_verify_token_output = output{
 # Check if token is valid by checking whether decoded_verify output exists or not
 #
 valid_token = true {
-    decode_verify_token_output
+    decode_verify_token_output[_][0]
 }
 
 #
 # Check trusted_researcher in the token payload
 #
 trusted_researcher = true {
-    decode_verify_token_output[0]
-    decode_verify_token_output[2].trusted_researcher == "true"
+    decode_verify_token_output[_][2].trusted_researcher == "true"
 }
 
 #
 # Check OPA_SITE_ADMIN_KEY in the token payload
 #
 OPA_SITE_ADMIN_KEY = true {
-    decode_verify_token_output[0]
-    some i
-    decode_verify_token_output[2].realm_access.roles[i] == "OPA_SITE_ADMIN_KEY"
+    decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
 }
 
-email := decode_verify_token_output[2].email        # get email from the token payload
+email := decode_verify_token_output[_][2].email        # get email from the token payload

@@ -51,18 +51,17 @@ identity_rights[right] {             # Right is in the identity_rights set if...
 
 # If token payload has OPA_SITE_ADMIN_KEY in it, allow always
 allow {
-    some i
-    decode_verify_token_output[2].realm_access.roles[i] == "OPA_SITE_ADMIN_KEY"
+    decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
 }
 
-decode_verify_token_output = output{
+decode_verify_token_output[issuer] := output {
     some i
-    output:=io.jwt.decode_verify(     # Decode and verify in one-step
-            input.identity,
-            {                         # With the supplied constraints:
-                "cert": data.keys[i].cert,
-                "iss": data.keys[i].iss,
-                "aud": "CLIENT_ID"
-            }
+    output := io.jwt.decode_verify(     # Decode and verify in one-step
+        input.identity,
+        {                         # With the supplied constraints:
+            "cert": data.keys[i].cert,
+            "iss": data.keys[i].iss,
+            "aud": "CLIENT_ID"
+        }
     )
 }
