@@ -6,11 +6,13 @@ package idp
 #
 decode_verify_token_output[issuer] := output {
     some i
+    issuer := data.keys[i].iss
+    cert := data.keys[i].cert
     output := io.jwt.decode_verify(     # Decode and verify in one-step
         input.token,
         {                         # With the supplied constraints:
-            "cert": data.keys[i].cert,
-            "iss": data.keys[i].iss,
+            "cert": cert,
+            "iss": issuer,
             "aud": "CLIENT_ID"
         }
     )
