@@ -1,7 +1,7 @@
 {
     "paths": {
         "get": [
-            "/moh/v1/?.*",
+            "/moh/v2/?.*",
             "/htsget/v1/variants/?.*",
             "/htsget/v1/variants/search",
             "/htsget/v1/variants/?.*/index",
