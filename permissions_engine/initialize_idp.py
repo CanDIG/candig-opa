@@ -2,6 +2,7 @@ import requests
 import json
 import os
 
+# Initializes Opa's list of known IDPs (keys) with our own Keycloak instance's information.
 MY_KEYCLOAK_REALM = os.getenv("KEYCLOAK_REALM_URL")
 
 data = dict()
