@@ -27,6 +27,6 @@ RUN chown -R candig:candig /app
 
 USER candig
 
-RUN touch initial_setup
+RUN touch /app/initial_setup
 
 ENTRYPOINT ["bash", "/app/entrypoint.sh"]
