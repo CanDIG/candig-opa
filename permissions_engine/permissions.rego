@@ -1,17 +1,22 @@
 package permissions
 #
 # This is the set of policy definitions for the permissions engine.
-# 
+#
 
 default datasets = []
 
-get_input_paths = data.paths.get
-post_input_paths = data.paths.post
+import data.store_token.token as token
+access = http.send({"method": "get", "url": "http://vault:8200/v1/opa/access", "headers": {"X-Vault-Token": token}}).body.data.access
+
+paths = http.send({"method": "get", "url": "http://vault:8200/v1/opa/paths", "headers": {"X-Vault-Token": token}}).body.data.paths
+
+get_input_paths = paths.get
+post_input_paths = paths.post
 
 #
-# Provided: 
+# Provided:
 # input = {
-#     'token': user token 
+#     'token': user token
 #     'method': method requested at data service
 #     'path': path to request at data service
 # }
@@ -27,7 +32,7 @@ import data.idp.email
 
 default registered_allowed = []
 
-registered_allowed = data.access.registered_datasets {
+registered_allowed = access.registered_datasets {
     valid_token         # extant, valid token
     trusted_researcher  # has claim we're using for registered access
 }
@@ -38,7 +43,7 @@ registered_allowed = data.access.registered_datasets {
 
 default controlled_allowed = []
 
-controlled_allowed = data.access.controlled_access_list[email]{
+controlled_allowed = access.controlled_access_list[email]{
     valid_token                  # extant, valid token
 }
 
@@ -47,20 +52,20 @@ controlled_allowed = data.access.controlled_access_list[email]{
 #
 
 # allowed datasets
-datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed)
+datasets = array.concat(array.concat(access.open_datasets, registered_allowed), controlled_allowed)
 {
     input.body.method = "GET"
     regex.match(get_input_paths[_], input.body.path) == true
 }
 
-datasets = array.concat(array.concat(data.access.open_datasets, registered_allowed), controlled_allowed)
+datasets = array.concat(array.concat(access.open_datasets, registered_allowed), controlled_allowed)
 {
     input.body.method = "POST"
     regex.match(post_input_paths[_], input.body.path) == true
 }
 
 # allowed datasets for counting
-datasets = array.concat(data.access.open_datasets, data.access.opt_in_datasets) {
+datasets = array.concat(access.open_datasets, access.opt_in_datasets) {
     valid_token == true
     input.method = "GET"
     regex.match(get_input_paths[_], input.body.path) == true
