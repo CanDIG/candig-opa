@@ -15,17 +15,20 @@ RUN apk add --no-cache \
 	bash \
 	expect \
 	jq \
-	curl
+	curl \
+	git
 
-COPY ./ /app/
+COPY requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-WORKDIR /app/
+COPY ./ /app/
 
 RUN chown -R candig:candig /app
 
 USER candig
+
+WORKDIR /app/
 
 RUN touch /app/initial_setup
 
