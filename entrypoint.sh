@@ -24,6 +24,6 @@ fi
 while [ 0 -eq 0 ]
 do
   echo "storing vault token"
-  bash get_vault_store_token.sh
   sleep 300
+  python3 get_vault_store_token.py
 done
