@@ -12,8 +12,6 @@ if [[ -f "/app/initial_setup" ]]; then
     sed -i s/OPA_SERVICE_TOKEN/$OPA_SERVICE_TOKEN/ /app/permissions_engine/authz.rego
 
     sed -i s/OPA_ROOT_TOKEN/$OPA_ROOT_TOKEN/ /app/permissions_engine/authz.rego
-    echo "initializing idp"
-    python3 /app/permissions_engine/initialize_idp.py
 
     python3 /app/initialize_vault_store.py
 
