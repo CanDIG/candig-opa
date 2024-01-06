@@ -16,19 +16,20 @@ try:
             sys.exit(1)
 
     with open('/app/permissions_engine/access.json') as f:
-        data = "\n".join(f.readlines())
-        response, status_code = set_service_store_secret("opa", key="access", value=json.loads(data))
+        data = f.read()
+        response, status_code = set_service_store_secret("opa", key="access", value=data)
         if status_code != 200:
             sys.exit(2)
         results.append(response)
 
     with open('/app/permissions_engine/paths.json') as f:
-        data = "\n".join(f.readlines())
-        response, status_code = set_service_store_secret("opa", key="paths", value=json.loads(data))
+        data = f.read()
+        response, status_code = set_service_store_secret("opa", key="paths", value=data)
         if status_code != 200:
             sys.exit(3)
         results.append(response)
-except:
+except Exception as e:
+    print(str(e))
     sys.exit(4)
 
 sys.exit(0)
