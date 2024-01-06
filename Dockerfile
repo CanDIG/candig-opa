@@ -7,6 +7,8 @@ LABEL "candigv2"="opa"
 
 USER root
 
+RUN addgroup -S candig && adduser -S candig -G candig
+
 RUN apk update
 
 RUN apk add --no-cache \
@@ -19,5 +21,12 @@ COPY ./ /app/
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-RUN touch initial_setup
+WORKDIR /app/
+
+RUN chown -R candig:candig /app
+
+USER candig
+
+RUN touch /app/initial_setup
+
 ENTRYPOINT ["bash", "/app/entrypoint.sh"]
