@@ -9,6 +9,7 @@ try:
     with open('/app/bearer.txt') as f:
         try:
             token = f.read().strip()
+            response, status_code = set_service_store_secret("opa", key="data", value=json.dumps({"keys":[]}))
             response = add_provider_to_opa(token, os.getenv("KEYCLOAK_REALM_URL"))
             results.append(response)
         except Exception as e:
