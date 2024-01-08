@@ -1,17 +1,14 @@
 ARG venv_python
-ARG alpine_version
-FROM python:${venv_python}-alpine${alpine_version}
+FROM python:${venv_python}
 
 LABEL Maintainer="CanDIG Project"
 LABEL "candigv2"="opa"
 
 USER root
 
-RUN addgroup -S candig && adduser -S candig -G candig
+RUN groupadd -r candig && useradd -r candig -g candig
 
-RUN apk update
-
-RUN apk add --no-cache \
+RUN apt-get update && apt-get -y install \
 	bash \
 	expect \
 	jq \
