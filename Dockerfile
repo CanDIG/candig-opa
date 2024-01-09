@@ -6,13 +6,14 @@ LABEL "candigv2"="opa"
 
 USER root
 
-RUN groupadd -r candig && useradd -r candig -g candig
+RUN groupadd -r candig && useradd -rm candig -g candig
 
 RUN apt-get update && apt-get -y install \
 	bash \
 	expect \
 	jq \
 	curl \
+	vim \
 	git
 
 COPY requirements.txt /app/requirements.txt
