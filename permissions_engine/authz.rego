@@ -70,3 +70,9 @@ decode_verify_token_output[issuer] := output {
         }
     )
 }
+
+# Any service should be able to verify that a service is who it says it is:
+allow {
+    input.path == ["v1", "data", "service", "verified"]
+    input.method == "POST"
+}
