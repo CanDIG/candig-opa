@@ -3,6 +3,8 @@ import os
 from authx.auth import set_service_store_secret, add_provider_to_opa
 import sys
 
+## Initializes Vault's opa service store with the information for our IDP and the data in access.json and paths.json
+
 results = []
 
 try:
@@ -33,4 +35,5 @@ except Exception as e:
     print(str(e))
     sys.exit(4)
 
+# print(json.dumps(results, indent=4))
 sys.exit(0)
