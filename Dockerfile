@@ -1,31 +1,32 @@
 ARG venv_python
-ARG alpine_version
-FROM python:${venv_python}-alpine${alpine_version}
+FROM python:${venv_python}
 
 LABEL Maintainer="CanDIG Project"
 LABEL "candigv2"="opa"
 
 USER root
 
-RUN addgroup -S candig && adduser -S candig -G candig
+RUN groupadd -r candig && useradd -rm candig -g candig
 
-RUN apk update
-
-RUN apk add --no-cache \
+RUN apt-get update && apt-get -y install \
 	bash \
 	expect \
 	jq \
-	curl
+	curl \
+	vim \
+	git
 
-COPY ./ /app/
+COPY requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-WORKDIR /app/
+COPY ./ /app/
 
 RUN chown -R candig:candig /app
 
 USER candig
+
+WORKDIR /app/
 
 RUN touch /app/initial_setup
 
