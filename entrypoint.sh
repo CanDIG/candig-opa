@@ -18,9 +18,9 @@ if [[ -f "/app/initial_setup" ]]; then
     if [[ $? -eq 0 ]]; then
         rm /app/initial_setup
         rm /app/bearer.txt
-        echo "!!!!!! SETUP COMPLETE !!!!!!"
+        echo "setup complete"
     else
-        echo "initialization failed, try again"
+        echo "!!!!!! INITIALIZATION FAILED, TRY AGAIN !!!!!!"
     fi
 fi
 
