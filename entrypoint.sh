@@ -13,6 +13,9 @@ if [[ -f "/app/initial_setup" ]]; then
 
     sed -i s/OPA_ROOT_TOKEN/$OPA_ROOT_TOKEN/ /app/permissions_engine/authz.rego
 
+    sed -i s/VAULT_URL/$VAULT_URL/ /app/permissions_engine/authz.rego
+    sed -i s/VAULT_URL/$VAULT_URL/ /app/permissions_engine/service.rego
+
     echo "initializing stores"
     python3 /app/initialize_vault_store.py
     if [[ $? -eq 0 ]]; then

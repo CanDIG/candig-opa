@@ -55,7 +55,7 @@ allow {
 }
 
 import data.store_token.token as token
-keys = http.send({"method": "get", "url": "http://vault:8200/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
+keys = http.send({"method": "get", "url": "VAULT_URL/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
 
 decode_verify_token_output[issuer] := output {
     some i

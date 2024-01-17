@@ -5,7 +5,7 @@ package service
 
 import data.store_token.token as token
 
-url = concat("/", ["http://vault:8200/v1", input.service, "token", input.token])
+url = concat("/", ["VAULT_URL/v1", input.service, "token", input.token])
 service_token = http.send({"method": "get", "url": url, "headers": {"X-Vault-Token": token}}).body.data.token
 
 verified {
