@@ -54,10 +54,13 @@ allow {
     decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
 }
 
+import data.store_token.token as token
+keys = http.send({"method": "get", "url": "http://vault:8200/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
+
 decode_verify_token_output[issuer] := output {
     some i
-    issuer := data.keys[i].iss
-    cert := data.keys[i].cert
+    issuer := keys[i].iss
+    cert := keys[i].cert
     output := io.jwt.decode_verify(     # Decode and verify in one-step
         input.identity,
         {                         # With the supplied constraints:
