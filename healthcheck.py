@@ -8,15 +8,14 @@ from pathlib import Path
 import datetime
 import requests
 
+keycloak_url = os.environ.get('KEYCLOAK_PUBLIC_URL')
+
 # Read Docker secrets
 with open("/run/secrets/client_secret") as f:
     client_secret = f.read().strip()
 
 with open("/run/secrets/password") as f:
     password = f.read().strip()
-
-client_id = "local_candig"
-username = "user2"
 
 def get_token(username=None, password=None, client_id=None, client_secret=None):
     payload = {
@@ -28,7 +27,7 @@ def get_token(username=None, password=None, client_id=None, client_secret=None):
         "scope": "openid",
     }
     response = requests.post(
-        "http://candig.docker.internal:8080/auth/realms/candig/protocol/openid-connect/token",
+        f"{keycloak_url}/auth/realms/candig/protocol/openid-connect/token",
         data=payload,
     )
     if response.status_code == 200:
@@ -36,8 +35,6 @@ def get_token(username=None, password=None, client_id=None, client_secret=None):
 
 def perform_healthcheck():
     auth_token = get_token(username="user2", password=password, client_id="local_candig", client_secret=client_secret)
-    print(f"Authentication Token: {auth_token}")
-
     headers = {"Authorization": f"Bearer {auth_token}"}
     url = "http://candig.docker.internal:8181/" 
 
@@ -51,4 +48,6 @@ def perform_healthcheck():
         return False
 
 if __name__ == "__main__":
-    perform_healthcheck()
+    health_status = perform_healthcheck()
+    if not health_status:
+        sys.exit(1)
