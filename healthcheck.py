@@ -36,7 +36,7 @@ def get_token(username=None, password=None, client_id=None, client_secret=None):
 def perform_healthcheck():
     auth_token = get_token(username="user2", password=password, client_id="local_candig", client_secret=client_secret)
     headers = {"Authorization": f"Bearer {auth_token}"}
-    url = "http://candig.docker.internal:8181/" 
+    url = os.environ.get('OPA_URL')
 
     try:
         response = requests.get(url, headers=headers)
