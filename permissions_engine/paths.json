@@ -10,6 +10,7 @@
           "/htsget/v1/reads/?.*",
           "/htsget/v1/reads/?.*/index",
           "/htsget/v1/reads/?.*/verify",
+          "/htsget/v1/samples/?.*",
           "/ga4gh/drs/v1/objects/?.*",
           "/ga4gh/drs/v1/cohorts/?.*",
           "/ga4gh/drs/v1/cohorts/?.*/status",
