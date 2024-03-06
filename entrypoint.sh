@@ -16,6 +16,8 @@ if [[ -f "/app/initial_setup" ]]; then
 
     sed -i s@VAULT_URL@$VAULT_URL@ /app/permissions_engine/authz.rego
     sed -i s@VAULT_URL@$VAULT_URL@ /app/permissions_engine/service.rego
+    sed -i s@VAULT_URL@$VAULT_URL@ /app/permissions_engine/idp.rego
+    sed -i s@VAULT_URL@$VAULT_URL@ /app/permissions_engine/permissions.rego
 
     echo "initializing stores"
     python3 /app/initialize_vault_store.py

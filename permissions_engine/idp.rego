@@ -6,7 +6,7 @@ package idp
 #
 
 import data.store_token.token as token
-keys = http.send({"method": "get", "url": "http://vault:8200/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
+keys = http.send({"method": "get", "url": "VAULT_URL/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
 
 decode_verify_token_output[issuer] := output {
     some i
@@ -28,6 +28,8 @@ decode_verify_token_output[issuer] := output {
 valid_token = true {
     decode_verify_token_output[_][0]
 }
+
+user := decode_verify_token_output[_][2].CANDIG_USER_KEY        # get user key from the token payload
 
 #
 # Check trusted_researcher in the token payload

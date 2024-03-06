@@ -6,9 +6,9 @@ package permissions
 default datasets = []
 
 import data.store_token.token as token
-access = http.send({"method": "get", "url": "http://vault:8200/v1/opa/access", "headers": {"X-Vault-Token": token}}).body.data.access
+access = http.send({"method": "get", "url": "VAULT_URL/v1/opa/access", "headers": {"X-Vault-Token": token}}).body.data.access
 
-paths = http.send({"method": "get", "url": "http://vault:8200/v1/opa/paths", "headers": {"X-Vault-Token": token}}).body.data.paths
+paths = http.send({"method": "get", "url": "VAULT_URL/v1/opa/paths", "headers": {"X-Vault-Token": token}}).body.data.paths
 
 get_input_paths = paths.get
 post_input_paths = paths.post
