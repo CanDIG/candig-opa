@@ -39,10 +39,13 @@ trusted_researcher = true {
 }
 
 #
-# Check OPA_SITE_ADMIN_KEY in the token payload
+# This user is a site admin if they have the site_admin role
 #
-OPA_SITE_ADMIN_KEY = true {
-    decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
+import future.keywords.in
+
+roles = http.send({"method": "get", "url": "VAULT_URL/v1/opa/roles", "headers": {"X-Vault-Token": token}}).body.data.roles
+site_admin = true {
+    user in roles.site_admin
 }
 
 email := decode_verify_token_output[_][2].email        # get email from the token payload
