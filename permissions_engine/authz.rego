@@ -55,10 +55,10 @@ import data.store_token.token as vault_token
 import future.keywords.in
 
 roles = http.send({"method": "get", "url": "VAULT_URL/v1/opa/roles", "headers": {"X-Vault-Token": vault_token}}).body.data.roles
-user := decode_verify_token_output[_][2].CANDIG_USER_KEY        # get user key from the token payload
+user_key := decode_verify_token_output[_][2].CANDIG_USER_KEY        # get user key from the token payload
 
 allow {
-    user in roles.site_admin
+    user_key in roles.site_admin
 }
 
 keys = http.send({"method": "get", "url": "VAULT_URL/v1/opa/data", "headers": {"X-Vault-Token": vault_token}}).body.data.keys

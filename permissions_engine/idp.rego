@@ -29,7 +29,7 @@ valid_token = true {
     decode_verify_token_output[_][0]
 }
 
-user := decode_verify_token_output[_][2].CANDIG_USER_KEY        # get user key from the token payload
+user_key := decode_verify_token_output[_][2].CANDIG_USER_KEY        # get user key from the token payload
 
 #
 # Check trusted_researcher in the token payload
@@ -45,7 +45,5 @@ import future.keywords.in
 
 roles = http.send({"method": "get", "url": "VAULT_URL/v1/opa/roles", "headers": {"X-Vault-Token": token}}).body.data.roles
 site_admin = true {
-    user in roles.site_admin
+    user_key in roles.site_admin
 }
-
-email := decode_verify_token_output[_][2].email        # get email from the token payload

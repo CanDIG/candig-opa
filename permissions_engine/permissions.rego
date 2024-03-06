@@ -23,7 +23,7 @@ post_input_paths = paths.post
 #
 import data.idp.valid_token
 import data.idp.trusted_researcher
-import data.idp.email
+import data.idp.user_key
 
 #
 # is registered access allowed?
@@ -43,7 +43,7 @@ registered_allowed = access.registered_datasets {
 
 default controlled_allowed = []
 
-controlled_allowed = access.controlled_access_list[email]{
+controlled_allowed = access.controlled_access_list[user_key]{
     valid_token                  # extant, valid token
 }
 
