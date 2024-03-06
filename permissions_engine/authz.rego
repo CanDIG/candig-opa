@@ -53,10 +53,10 @@ identity_rights[right] {             # Right is in the identity_rights set if...
 allow {
     decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
 }
+import data.store_token.token as vault_token
 
-import data.store_token.token as token
-keys = http.send({"method": "get", "url": "VAULT_URL/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
 
+keys = http.send({"method": "get", "url": "VAULT_URL/v1/opa/data", "headers": {"X-Vault-Token": vault_token}}).body.data.keys
 decode_verify_token_output[issuer] := output {
     some i
     issuer := keys[i].iss
