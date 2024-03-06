@@ -3,7 +3,7 @@
         "site_admin": [
             "user2@test.ca"
         ],
-        "data_custodian": [
+        "site_curator": [
         ],
         "local_team": [
             "user1@test.ca"
