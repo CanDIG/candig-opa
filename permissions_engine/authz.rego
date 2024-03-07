@@ -55,7 +55,7 @@ allow {
 }
 
 import data.store_token.token as token
-keys = http.send({"method": "get", "url": "http://vault:8200/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
+keys = http.send({"method": "get", "url": "VAULT_URL/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
 
 decode_verify_token_output[issuer] := output {
     some i
@@ -69,4 +69,10 @@ decode_verify_token_output[issuer] := output {
             "aud": "CLIENT_ID"
         }
     )
+}
+
+# Any service should be able to verify that a service is who it says it is:
+allow {
+    input.path == ["v1", "data", "service", "verified"]
+    input.method == "POST"
 }
