@@ -22,20 +22,7 @@ post_input_paths = paths.post
 # }
 #
 import data.idp.valid_token
-import data.idp.trusted_researcher
 import data.idp.user_key
-
-#
-# is registered access allowed?
-# TODO: decide on claim we're using for registered access
-#
-
-default registered_allowed = []
-
-registered_allowed = access.registered_datasets {
-    valid_token         # extant, valid token
-    trusted_researcher  # has claim we're using for registered access
-}
 
 #
 # what controlled access datasets are allowed?
@@ -52,22 +39,14 @@ controlled_allowed = access.controlled_access_list[user_key]{
 #
 
 # allowed datasets
-datasets = array.concat(array.concat(access.open_datasets, registered_allowed), controlled_allowed)
+datasets = controlled_allowed
 {
     input.body.method = "GET"
     regex.match(get_input_paths[_], input.body.path) == true
 }
 
-datasets = array.concat(array.concat(access.open_datasets, registered_allowed), controlled_allowed)
+datasets = controlled_allowed
 {
     input.body.method = "POST"
     regex.match(post_input_paths[_], input.body.path) == true
-}
-
-# allowed datasets for counting
-datasets = array.concat(access.open_datasets, access.opt_in_datasets) {
-    valid_token == true
-    input.method = "GET"
-    regex.match(get_input_paths[_], input.body.path) == true
-    input.query_type = "counts"
 }
