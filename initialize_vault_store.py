@@ -31,6 +31,13 @@ try:
         if status_code != 200:
             sys.exit(3)
         results.append(response)
+
+    with open('/app/permissions_engine/roles.json') as f:
+        data = f.read()
+        response, status_code = set_service_store_secret("opa", key="roles", value=data)
+        if status_code != 200:
+            sys.exit(2)
+        results.append(response)
 except Exception as e:
     print(str(e))
     sys.exit(4)

@@ -1,0 +1,17 @@
+{
+    "roles": {
+        "site_admin": [
+            "user2@test.ca"
+        ],
+        "data_custodian": [
+        ],
+        "local_team": [
+            "user1@test.ca"
+        ],
+        "mohccn_network": [
+            "user1@test.ca",
+            "user2@test.ca"
+        ]
+    }
+}
+

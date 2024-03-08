@@ -6,7 +6,7 @@ package idp
 #
 
 import data.store_token.token as token
-keys = http.send({"method": "get", "url": "http://vault:8200/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
+keys = http.send({"method": "get", "url": "VAULT_URL/v1/opa/data", "headers": {"X-Vault-Token": token}}).body.data.keys
 
 decode_verify_token_output[issuer] := output {
     some i
@@ -29,6 +29,8 @@ valid_token = true {
     decode_verify_token_output[_][0]
 }
 
+user_key := decode_verify_token_output[_][2].CANDIG_USER_KEY        # get user key from the token payload
+
 #
 # Check trusted_researcher in the token payload
 #
@@ -37,10 +39,11 @@ trusted_researcher = true {
 }
 
 #
-# Check OPA_SITE_ADMIN_KEY in the token payload
+# This user is a site admin if they have the site_admin role
 #
-OPA_SITE_ADMIN_KEY = true {
-    decode_verify_token_output[_][2].realm_access.roles[_] == "OPA_SITE_ADMIN_KEY"
-}
+import future.keywords.in
 
-email := decode_verify_token_output[_][2].email        # get email from the token payload
+roles = http.send({"method": "get", "url": "VAULT_URL/v1/opa/roles", "headers": {"X-Vault-Token": token}}).body.data.roles
+site_admin = true {
+    user_key in roles.site_admin
+}
