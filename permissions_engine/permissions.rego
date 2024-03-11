@@ -71,3 +71,13 @@ else := curateable_programs
     input.body.method = "POST"
     regex.match(paths.curate.post[_], input.body.path) == true
 }
+
+# convenience path: if a specific program is in the body, allowed = true if that program is in datasets
+allowed := true
+{
+    input.body.program in datasets
+}
+else := true
+{
+    site_admin
+}
