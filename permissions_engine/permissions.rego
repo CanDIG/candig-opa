@@ -15,6 +15,7 @@ import data.store_token.token as token
 #
 import data.idp.valid_token
 import data.idp.user_key
+import data.idp.site_admin
 
 #
 # what programs are available to this user?
@@ -43,14 +44,21 @@ paths = http.send({"method": "get", "url": "VAULT_URL/v1/opa/paths", "headers": 
 # which datasets can this user see for this method, path
 default datasets = []
 
-datasets = readable_programs
+# site admins can see all programs
+datasets := all_programs
+{
+    site_admin
+}
+
+# if user is a team_member, they can access programs that allow read access for this method, path
+else := readable_programs
 {
     valid_token
     input.body.method = "GET"
     regex.match(paths.read.get[_], input.body.path) == true
 }
 
-datasets = readable_programs
+else := readable_programs
 {
     valid_token
     input.body.method = "POST"
