@@ -10,6 +10,9 @@ rights = {
     "datasets": {
         "path": ["v1", "data", "permissions", "datasets"]
     },
+    "allowed": {
+        "path": ["v1", "data", "permissions", "allowed"]
+    },
     "tokenControlledAccessREMS": {
         "path": ["v1", "data", "ga4ghPassport", "tokenControlledAccessREMS"]
     }
@@ -23,7 +26,7 @@ tokens = {
         "roles": ["admin"]
     },
     service_token : {
-        "roles": ["datasets", "tokenControlledAccessREMS"]
+        "roles": ["datasets", "allowed", "tokenControlledAccessREMS"]
     }
 }
 
