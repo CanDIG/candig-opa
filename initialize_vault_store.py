@@ -3,7 +3,7 @@ import os
 from authx.auth import set_service_store_secret, add_provider_to_opa, add_program_to_opa
 import sys
 
-## Initializes Vault's opa service store with the information for our IDP and the data in access.json and paths.json
+## Initializes Vault's opa service store with the information for our IDP and the data in roles.json, paths.json, programs.json
 
 results = []
 
@@ -17,13 +17,6 @@ try:
         except Exception as e:
             print(str(e))
             sys.exit(1)
-
-    with open('/app/defaults/access.json') as f:
-        data = f.read()
-        response, status_code = set_service_store_secret("opa", key="access", value=data)
-        if status_code != 200:
-            sys.exit(2)
-        results.append(response)
 
     with open('/app/defaults/paths.json') as f:
         data = f.read()
