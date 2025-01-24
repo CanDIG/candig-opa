@@ -69,6 +69,11 @@ allowed if {
 }
 
 else if {
+ 	regex.match("/me$", input.body.path)
+ 	input.body.method == "GET"
+}
+
+else if {
 	input.body.program in datasets
 }
 
