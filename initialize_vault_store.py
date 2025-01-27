@@ -48,5 +48,12 @@ if status_code == 404:
     if status_code != 200:
         sys.exit(2)
 
+# initialize approved users
+response, status_code = get_service_store_secret("opa", key="preapproved_users")
+if status_code == 404:
+    response, status_code = set_service_store_secret("opa", key="preapproved_users", value=json.dumps({"preapproved_users": []}))
+    if status_code != 200:
+        sys.exit(2)
+
 # print(json.dumps(results, indent=4))
 sys.exit(0)

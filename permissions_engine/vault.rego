@@ -32,6 +32,6 @@ user_auth := http.send({"method": "get", "url": concat("/", ["VAULT_URL/v1/opa/u
 
 default user_programs := []
 
-user_programs := user_auth.body.data.programs if {
+user_programs := user_auth.body.data.dac_authorizations if {
 	user_auth.status_code = 200
 }

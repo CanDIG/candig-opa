@@ -10,4 +10,7 @@ verified if {
 	service_token == input.token
 }
 
+else := false
+
+
 minus(service, info) := "opa service is running"
