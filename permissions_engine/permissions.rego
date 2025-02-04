@@ -11,12 +11,20 @@ valid_token if {
 
 else := false
 
+is_local_token if {
+	data.idp.is_local_token
+}
+
+else := false
+
 site_admin := data.calculate.site_admin if {
 	valid_token
+	is_local_token
 }
 
 site_curator := data.calculate.site_curator if {
 	valid_token
+	is_local_token
 }
 
 datasets := data.calculate.datasets if {

@@ -184,7 +184,7 @@ def setup_vault(user, site_roles, users, programs):
     return vault
 
 
-def evaluate_opa(user, input, key, expected_result, site_roles, users, programs):
+def evaluate_opa(user, input, key, expected_result, site_roles, users, programs, local_token=True):
     args = [
         "./opa", "eval",
         "--data", "permissions_engine/authz.rego",
@@ -200,7 +200,8 @@ def evaluate_opa(user, input, key, expected_result, site_roles, users, programs)
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as idp_fp:
             idp = {"idp": {
                     "user_key": users[user]["user"]["user_name"],
-                    "valid_token": True
+                    "valid_token": True,
+                    "is_local_token": local_token
                 }
             }
             json.dump(idp, idp_fp)
@@ -230,18 +231,25 @@ def get_site_admin_tests():
     return [
         ( # user1 is not a site admin
             "user1",
+            True,
             False
         ),
         ( # site_admin is a site admin
             "site_admin",
+            True,
             True
+        ),
+        ( # site_admin is not a site admin if it's not a local token
+            "site_admin",
+            False,
+            False
         )
     ]
 
 
-@pytest.mark.parametrize('user, expected_result', get_site_admin_tests())
-def test_site_admin(user, expected_result, site_roles, users, programs):
-    evaluate_opa(user, {}, "site_admin", expected_result, site_roles, users, programs)
+@pytest.mark.parametrize('user, local_token, expected_result', get_site_admin_tests())
+def test_site_admin(user, expected_result, site_roles, users, programs, local_token):
+    evaluate_opa(user, {}, "site_admin", expected_result, site_roles, users, programs, local_token)
 
 
 def get_user_datasets():
