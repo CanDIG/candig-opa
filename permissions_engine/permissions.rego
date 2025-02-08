@@ -124,6 +124,12 @@ user_is_site_curator if {
 
 else := false
 
+user_is_candig_authorized if {
+	data.vault.user_auth.status_code == 200
+}
+
+else := false
+
 # programs the user is listed as a team member for
 team_member_programs := object.keys(data.calculate.team_readable_programs)
 
