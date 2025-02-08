@@ -77,12 +77,12 @@ allowed if {
 }
 
 else if {
- 	regex.match("/me$", input.body.path)
- 	input.body.method == "GET"
+	input.body.program in datasets
 }
 
 else if {
-	input.body.program in datasets
+	regex.match("/me$", input.body.path)
+	input.body.method == "GET"
 }
 
 else if {
