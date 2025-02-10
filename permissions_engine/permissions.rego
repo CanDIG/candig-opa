@@ -77,12 +77,12 @@ allowed if {
 }
 
 else if {
- 	regex.match("/me$", input.body.path)
- 	input.body.method == "GET"
+	input.body.program in datasets
 }
 
 else if {
-	input.body.program in datasets
+	regex.match("/me$", input.body.path)
+	input.body.method == "GET"
 }
 
 else if {
@@ -120,6 +120,12 @@ else := false
 
 user_is_site_curator if {
 	user_key in data.vault.site_roles.curator
+}
+
+else := false
+
+user_is_candig_authorized if {
+	data.vault.user_auth.status_code == 200
 }
 
 else := false
