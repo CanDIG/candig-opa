@@ -154,12 +154,11 @@ def users():
                 }
             ]
         },
-        "user_auth_only": {
-            # user_auth_only is authorized for no programs
+        "user_not_authz": {
+            # user_not_authz is not candig-authorized
             "user": {
-                "user_name": "user_auth_only@test.ca"
-            },
-            "programs": []
+                "user_name": "user_not_authz@test.ca"
+            }
         },
         "site_admin": {
             "user": {
@@ -177,7 +176,12 @@ def setup_vault(user, site_roles, users, programs):
     vault["vault"]["all_programs"] = list(programs.keys())
     vault["vault"]["site_roles"] = site_roles
     user_read_auth = users[user]
-    vault["vault"]["user_programs"] = user_read_auth["programs"]
+    if "programs" in user_read_auth:
+        vault["vault"]["user_programs"] = user_read_auth["programs"]
+        vault["vault"]["user_auth"] = {"status_code": 200}
+    else:
+        vault["vault"]["user_programs"] = []
+        vault["vault"]["user_auth"] = {"status_code": 403}
     with open(f"{DEFAULTS_DIR}/paths.json") as f:
         paths = json.load(f)
         vault["vault"]["paths"] = paths["paths"]
@@ -344,3 +348,31 @@ def get_curation_allowed():
 @pytest.mark.parametrize('user, input, expected_result', get_curation_allowed())
 def test_curation_allowed(user, input, expected_result, site_roles, users, programs):
     evaluate_opa(user, input, "allowed", expected_result, site_roles, users, programs)
+
+
+def get_is_user_candig_authorized():
+    return [
+        ( # user1 is a candig-authorized user
+            "user1",
+            {
+                "body": {
+                  "path": "/ga4gh/drs/v1/programs/",
+                  "method": "POST"
+                }
+            },
+            True
+        ),
+        ( # user_not_autz is not candig-authorized
+            "user_not_authz",
+            {
+                "body": {
+                  "path": "/ga4gh/drs/v1/programs/",
+                  "method": "POST"
+                }
+            },
+            False
+        )
+    ]
+@pytest.mark.parametrize('user, input, expected_result', get_is_user_candig_authorized())
+def test_user_is_candig_authorized(user, input, expected_result, site_roles, users, programs):
+    evaluate_opa(user, input, "user_is_candig_authorized", expected_result, site_roles, users, programs)
