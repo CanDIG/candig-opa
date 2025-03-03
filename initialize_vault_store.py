@@ -1,6 +1,5 @@
 import json
-import os
-from authx.auth import get_service_store_secret, set_service_store_secret, add_program_to_opa, list_programs_in_opa
+from authx.auth import get_service_store_secret, set_service_store_secret
 import sys
 
 ## Initializes Vault's opa service store with the data in site_roles.json, paths.json, programs.json
@@ -26,17 +25,6 @@ try:
                 raise Exception(f"failed to save site roles: {response} {status_code}")
             results.append(response)
 
-    current_programs, status_code = list_programs_in_opa()
-    if status_code != 200:
-        current_programs = []
-    with open('/app/defaults/programs.json') as f:
-        programs = json.load(f)
-        for program in programs:
-            if programs[program] not in current_programs:
-                response, status_code = add_program_to_opa(programs[program])
-                if status_code != 200:
-                    raise Exception(f"failed to save program authz: {response} {status_code}")
-                results.append(response)
 except Exception as e:
     print(str(e))
     sys.exit(4)
