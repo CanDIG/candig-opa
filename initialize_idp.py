@@ -18,7 +18,7 @@ try:
             print("IDP is incorrect: verify that Keycloak is set up and clean/build/compose opa again")
             sys.exit(2)
 except Exception as e:
-    raise Exception(f"failed to save idp keys: {str(e)} {status_code}")
+    raise Exception(f"failed to save idp keys: {type(e)} {str(e)}")
     sys.exit(1)
 
 sys.exit(0)
