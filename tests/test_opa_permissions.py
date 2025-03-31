@@ -96,13 +96,13 @@ def users():
             "user": {
                 "user_name": "user1@test.ca"
             },
-            "programs": [
-                {
+            "programs": {
+                "SYNTHETIC-1": {
                     "program_id": "SYNTHETIC-1",
                     "start_date": THE_PAST,
                     "end_date": THE_FUTURE
                 }
-            ]
+            }
         },
         "user2": {
             # user2 is curator for SYNTHETIC-2
@@ -110,18 +110,18 @@ def users():
             "user": {
                 "user_name": "user2@test.ca"
             },
-            "programs": [
-                {
+            "programs": {
+                "SYNTHETIC-1": {
                     "program_id": "SYNTHETIC-1",
                     "start_date": THE_PAST,
                     "end_date": THE_FUTURE
                 },
-                {
+                "SYNTHETIC-4": {
                     "program_id": "SYNTHETIC-4",
                     "start_date": THE_PAST,
                     "end_date": THE_FUTURE
                 }
-            ]
+            }
         },
         "user3": {
             # user3 is curator for SYNTHETIC-3
@@ -129,30 +129,30 @@ def users():
             "user": {
                 "user_name": "user3@test.ca"
             },
-            "programs": [
-                { # this program is already OVER
+            "programs": {
+                "SYNTHETIC-1": { # this program is already OVER
                     "program_id": "SYNTHETIC-1",
                     "start_date": THE_PAST,
                     "end_date": THE_PAST
                 },
-                {
+                "SYNTHETIC-4": {
                     "program_id": "SYNTHETIC-4",
                     "start_date": THE_PAST,
                     "end_date": THE_FUTURE
                 }
-            ]
+            }
         },
         "dac_user": {
             "user": {
                 "user_name": "dac_user@test.ca"
             },
-            "programs": [
-                {
+            "programs": {
+                "SYNTHETIC-3": {
                     "program_id": "SYNTHETIC-3",
                     "start_date": THE_PAST,
                     "end_date": THE_FUTURE
                 }
-            ]
+            }
         },
         "user_not_authz": {
             # user_not_authz is not candig-authorized
@@ -164,7 +164,7 @@ def users():
             "user": {
                 "user_name": "site_admin@test.ca"
             },
-            "programs": []
+            "programs": {}
         },
 
     }
@@ -267,6 +267,16 @@ def get_user_datasets():
             "user1",
             {"body": {"path": "/v3/discovery/programs/", "method": "GET"}},
             ["SYNTHETIC-1", "SYNTHETIC-3", "SYNTHETIC-4"],
+        ),
+        (  # user2 can view all datasets because they're a site curator
+            "user2",
+            {"body": {"path": "/v3/authorized/programs/", "method": "GET"}},
+            ["SYNTHETIC-1", "SYNTHETIC-2", "SYNTHETIC-3", "SYNTHETIC-4"],
+        ),
+        (  # user2 can view all datasets because they're a site curator
+            "user2",
+            {"body": {"path": None, "method": None}},
+            ["SYNTHETIC-1", "SYNTHETIC-2", "SYNTHETIC-3", "SYNTHETIC-4"],
         ),
         (  # user3 can view the datasets it's a member of + DAC programs,
             # but SYNTHETIC-1's authorized dates are in the past
