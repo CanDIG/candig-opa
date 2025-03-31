@@ -121,6 +121,10 @@ else := readable_programs if {
 
 # if user is a curator, they can access programs that allow curate access for them for this method, path
 else := curateable_programs if {
+	site_curator
+}
+
+else := curateable_programs if {
 	input.body.method = "GET"
 	regex.match(paths.curate.get[_], input.body.path) == true
 }
