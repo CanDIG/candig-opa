@@ -137,4 +137,4 @@ team_member_programs := object.keys(data.calculate.team_readable_programs)
 dac_programs := object.keys(data.vault.user_programs)
 
 # programs the user is listed as a program curator for
-curator_programs := object.keys(data.calculate.curateable_programs)
+curator_programs := object.keys(data.calculate.program_curateable_programs)
