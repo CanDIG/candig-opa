@@ -54,13 +54,23 @@ team_readable_programs[p] := output if {
 }
 
 # user can read programs that are either team-readable or user-readable
-readable_programs := object.keys(object.union(team_readable_programs, user_readable_programs))
+readable_programs := all_programs if {
+	user_key in site_roles.curator
+}
+
+else := object.keys(object.union(team_readable_programs, user_readable_programs))
 
 # user can curate programs that list the user as a program curator
-curateable_programs[p] if {
+program_curateable_programs[p] if {
 	some p in all_programs
 	user_key in program_auths[p].program_curators
 }
+
+curateable_programs := all_programs if {
+	user_key in site_roles.curator
+}
+
+else := program_curateable_programs
 
 import data.vault.paths as paths
 
@@ -109,26 +119,7 @@ else := readable_programs if {
 	regex.match(paths.read.post[_], input.body.path) == true
 }
 
-# if user is a site curator, they can access all programs that allow curate access for this method, path
-else := all_programs if {
-	user_key in site_roles.curator
-	input.body.method = "GET"
-	regex.match(paths.curate.get[_], input.body.path) == true
-}
-
-else := all_programs if {
-	user_key in site_roles.curator
-	input.body.method = "POST"
-	regex.match(paths.curate.post[_], input.body.path) == true
-}
-
-else := all_programs if {
-	user_key in site_roles.curator
-	input.body.method = "DELETE"
-	regex.match(paths.curate.delete[_], input.body.path) == true
-}
-
-# if user is a program_curator, they can access programs that allow curate access for them for this method, path
+# if user is a curator, they can access programs that allow curate access for them for this method, path
 else := curateable_programs if {
 	input.body.method = "GET"
 	regex.match(paths.curate.get[_], input.body.path) == true
