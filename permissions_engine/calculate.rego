@@ -60,16 +60,18 @@ readable_programs := all_programs if {
 
 else := object.keys(object.union(team_readable_programs, user_readable_programs))
 
-# user can curate programs that list the user as a program curator
+# programs that list the user as a program curator
 program_curateable_programs[p] if {
 	some p in all_programs
 	user_key in program_auths[p].program_curators
 }
 
+# if the user is a site curator, they can curate any program
 curateable_programs := all_programs if {
 	user_key in site_roles.curator
 }
 
+# otherwise, the user can curate programs where they're listed as a program curator
 else := program_curateable_programs
 
 import data.vault.paths as paths
