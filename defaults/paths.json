@@ -29,7 +29,7 @@
                 "/ingest/s3-credential/?.*",
                 "/ingest/program/?.*",
                 "/ingest/user/?.*",
-                "/ingest/ingest",
+                "/ingest/?.*",
                 "/ga4gh/drs/v1/?.*",
                 "/v3/ingest/?.*"
             ],
