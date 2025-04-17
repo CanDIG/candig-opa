@@ -22,10 +22,8 @@
         "curate": {
             "get": [
                 "/ingest/?.*",
-                "/htsget/v1/variants/?.*/index",
-                "/htsget/v1/variants/?.*/verify",
-                "/htsget/v1/reads/?.*/index",
-                "/htsget/v1/reads/?.*/verify"
+                "/htsget/v1/?.*/index",
+                "/htsget/v1/?.*/verify"
             ],
             "post": [
                 "/ingest/s3-credential/?.*",
