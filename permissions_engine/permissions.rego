@@ -22,10 +22,14 @@ site_admin := data.calculate.site_admin if {
 	is_local_token
 }
 
+else := false
+
 site_curator := data.calculate.site_curator if {
 	valid_token
 	is_local_token
 }
+
+else := false
 
 datasets := data.calculate.datasets if {
 	valid_token
@@ -99,6 +103,8 @@ else if {
 	readable_method_path
 }
 
+else := false
+
 #
 # User information, for decision log
 #
@@ -108,33 +114,35 @@ user_key := data.idp.user_key
 
 issuer := data.idp.user_info.iss
 
-#
-# Debugging information for decision log
-#
-
-user_is_site_admin if {
-	user_key in data.vault.site_roles.admin
-}
-
-else := false
-
-user_is_site_curator if {
-	user_key in data.vault.site_roles.curator
-}
-
-else := false
-
 user_is_candig_authorized if {
 	data.vault.user_auth.status_code == 200
 }
 
 else := false
 
+#
+# Debugging information for decision log
+#
+
+debug.local_issuer := data.vault.keys[0].iss
+
+debug.user_key_listed_as_site_admin if {
+	user_key in data.vault.site_roles.admin
+}
+
+else := false
+
+debug.user_key_listed_as_site_curator if {
+	user_key in data.vault.site_roles.curator
+}
+
+else := false
+
 # programs the user is listed as a team member for
-team_member_programs := object.keys(data.calculate.team_readable_programs)
+debug.user_key_has_team_member_programs := object.keys(data.calculate.team_readable_programs)
 
 # programs the user is approved by dac for
-dac_programs := object.keys(data.vault.user_programs)
+debug.user_key_has_dac_programs := object.keys(data.vault.user_programs)
 
 # programs the user is listed as a program curator for
-curator_programs := object.keys(data.calculate.program_curateable_programs)
+debug.user_key_has_curator_programs := object.keys(data.calculate.program_curateable_programs)
