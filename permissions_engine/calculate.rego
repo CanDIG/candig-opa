@@ -47,10 +47,9 @@ user_readable_programs[p.program_id] := output if {
 }
 
 # compile list of programs that list the user as a team member
-team_readable_programs[p] := output if {
+team_readable_programs contains p if {
 	some p in all_programs
 	user_key in program_auths[p].team_members
-	output := program_auths[p].team_members
 }
 
 # user can read programs that are either team-readable or user-readable
@@ -61,7 +60,7 @@ readable_programs := all_programs if {
 else := object.keys(object.union(team_readable_programs, user_readable_programs))
 
 # programs that list the user as a program curator
-program_curateable_programs[p] if {
+program_curateable_programs contains p if {
 	some p in all_programs
 	user_key in program_auths[p].program_curators
 }
