@@ -34,16 +34,17 @@ site_curator if {
 # what programs are available to this user?
 #
 
-import data.vault.all_programs as all_programs
 import data.vault.program_auths as program_auths
 import data.vault.user_programs as user_programs
 
+# convert this to be a set, not an array
+all_programs := {x | x := data.vault.all_programs[_]}
+
 # compile list of programs specifically authorized for the user by DACs and within the authorized time period
-user_readable_programs[p.program_id] := output if {
+user_readable_programs contains p.program_id if {
 	some p in user_programs
 	time.parse_ns("2006-01-02", p.start_date) <= time.now_ns()
 	time.parse_ns("2006-01-02", p.end_date) >= time.now_ns()
-	output := p
 }
 
 # compile list of programs that list the user as a team member
@@ -57,7 +58,7 @@ readable_programs := all_programs if {
 	user_key in site_roles.curator
 }
 
-else := object.keys(object.union(team_readable_programs, user_readable_programs))
+else := team_readable_programs | user_readable_programs
 
 # programs that list the user as a program curator
 program_curateable_programs contains p if {
@@ -101,6 +102,8 @@ curateable_delete[p] := output if {
 	output := regex.match(p, input.body.path)
 }
 
+accessible_programs := curateable_programs | readable_programs
+
 # which datasets can this user see for this method, path
 default datasets := []
 
@@ -110,21 +113,21 @@ datasets := all_programs if {
 }
 
 # if user is a curator, they can access programs that allow curate access for them for this method, path
-else := curateable_programs | readable_programs if {
+else := accessible_programs if {
 	site_curator
 }
 
-else := curateable_programs | readable_programs if {
+else := accessible_programs if {
 	input.body.method = "GET"
 	regex.match(paths.curate.get[_], input.body.path) == true
 }
 
-else := curateable_programs | readable_programs if {
+else := accessible_programs if {
 	input.body.method = "POST"
 	regex.match(paths.curate.post[_], input.body.path) == true
 }
 
-else := curateable_programs | readable_programs if {
+else := accessible_programs if {
 	input.body.method = "DELETE"
 	regex.match(paths.curate.delete[_], input.body.path) == true
 }
