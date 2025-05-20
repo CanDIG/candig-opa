@@ -139,10 +139,10 @@ debug.user_key_listed_as_site_curator if {
 else := false
 
 # programs the user is listed as a team member for
-debug.user_key_has_team_member_programs := object.keys(data.calculate.team_readable_programs)
+debug.user_key_has_team_member_programs := data.calculate.team_readable_programs
 
 # programs the user is approved by dac for
 debug.user_key_has_dac_programs := object.keys(data.vault.user_programs)
 
 # programs the user is listed as a program curator for
-debug.user_key_has_curator_programs := object.keys(data.calculate.program_curateable_programs)
+debug.user_key_has_curator_programs := data.calculate.program_curateable_programs

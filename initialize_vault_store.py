@@ -7,14 +7,14 @@ import sys
 results = []
 
 try:
-    response, status_code = get_service_store_secret("opa", key="paths")
-    if status_code != 200:
-        with open('/app/defaults/paths.json') as f:
-            data = f.read()
-            response, status_code = set_service_store_secret("opa", key="paths", value=data)
-            if status_code != 200:
-                raise Exception(f"failed to save paths: {response} {status_code}")
-            results.append(response)
+    # response, status_code = get_service_store_secret("opa", key="paths")
+    # if status_code != 200:
+    with open('/app/defaults/paths.json') as f:
+        data = f.read()
+        response, status_code = set_service_store_secret("opa", key="paths", value=data)
+        if status_code != 200:
+            raise Exception(f"failed to save paths: {response} {status_code}")
+        results.append(response)
 
     response, status_code = get_service_store_secret("opa", key="site_roles")
     if status_code != 200:
