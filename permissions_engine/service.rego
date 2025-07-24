@@ -10,6 +10,10 @@ verified if {
 	service_token == input.token
 }
 
+else if {
+	data.idp.is_external_service[input.service] == true
+}
+
 else := false
 
 
