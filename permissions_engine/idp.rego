@@ -86,7 +86,7 @@ services := data.vault.external_services
 
 is_external_service[i] if {
 	some i in object.keys(services)
-	services[i].user == decode_verify_token_output[_][2].CANDIG_USER_KEY
+#	services[i].user == decode_verify_token_output[_][2].CANDIG_USER_KEY
 	services[i].issuer == decode_verify_token_output[_][2].iss
 	services[i].client_id == decode_verify_token_output[_][2].azp
 }
