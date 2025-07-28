@@ -16,13 +16,12 @@ import rego.v1
 decode_verify_token(key, token) := output if {
 	issuer := key.iss
 	cert := key.cert
-	aud := key.aud[_]
 	output := io.jwt.decode_verify(
 		token, # Decode and verify in one-step
 		{
 			"cert": cert, # With the supplied constraints:
 			"iss": issuer,
-			"aud": aud,
+			"aud": "KEYCLOAK_CLIENT_ID",
 		},
 	)
 }
@@ -44,7 +43,7 @@ user_info := decoded_output[1]
 user_key := user_info.CANDIG_USER_KEY
 
 #
-# If either input.identity or input.token are valid against an issuer, decode and verify
+# If input.token is valid against an issuer, decode and verify
 #
 decode_verify_token_output[issuer] := output if {
 	possible_tokens := ["identity", "token"]
@@ -80,4 +79,14 @@ trusted_researcher if {
 #
 is_local_token if {
 	keys[0].iss == token_issuer
+}
+
+# we can tell if a token is from an external service if it matches the claims of a registered external service
+services := data.vault.external_services
+
+is_external_service[i] if {
+	some i in object.keys(services)
+#	services[i].user == decode_verify_token_output[_][2].CANDIG_USER_KEY
+	services[i].issuer == decode_verify_token_output[_][2].iss
+	services[i].client_id == decode_verify_token_output[_][2].azp
 }

@@ -6,6 +6,7 @@ set -Euo pipefail
 if [[ -f "/app/initial_setup" ]]; then
     # set up our default values
     sed -i s/CANDIG_USER_KEY/$CANDIG_USER_KEY/ /app/permissions_engine/idp.rego
+    sed -i s/KEYCLOAK_CLIENT_ID/$KEYCLOAK_CLIENT_ID/ /app/permissions_engine/idp.rego
 
     # set up default users in default jsons:
     sed -i s/SITE_ADMIN_USER/$SITE_ADMIN_USER/ /app/defaults/site_roles.json
