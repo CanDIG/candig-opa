@@ -13,7 +13,7 @@ import rego.v1
 #
 # Function to decode and verify if a token is valid against a key
 #
-decode_verify_token(key, token) := output if {
+decode_verify_token(key, token, aud) := output if {
 	issuer := key.iss
 	cert := key.cert
 	output := io.jwt.decode_verify(
@@ -21,7 +21,7 @@ decode_verify_token(key, token) := output if {
 		{
 			"cert": cert, # With the supplied constraints:
 			"iss": issuer,
-			"aud": "KEYCLOAK_CLIENT_ID",
+			"aud": aud,
 		},
 	)
 }
@@ -49,7 +49,9 @@ decode_verify_token_output[issuer] := output if {
 	possible_tokens := ["identity", "token"]
 	some i
 	issuer := keys[i].iss
-	output := decode_verify_token(keys[i], input[possible_tokens[_]])
+	some j
+	aud := keys[i].aud[j]
+	output := decode_verify_token(keys[i], input[possible_tokens[_]], aud)
 }
 
 #
