@@ -81,6 +81,7 @@ trusted_researcher if {
 #
 is_local_token if {
 	keys[0].iss == token_issuer
+	user_info.azp == "KEYCLOAK_CLIENT_ID"
 }
 
 # we can tell if a token is from an external service if it matches the claims of a registered external service
