@@ -45,7 +45,7 @@ user_key := user_info.CANDIG_USER_KEY
 #
 # If input.token is valid against an issuer, decode and verify
 #
-decode_verify_token_output[issuer] := output if {
+decode_verify_token_output[issuer][aud] := output if {
 	possible_tokens := ["identity", "token"]
 	some i
 	issuer := keys[i].iss
@@ -59,21 +59,21 @@ decode_verify_token_output[issuer] := output if {
 #
 token_issuer := i if {
 	some i in object.keys(decode_verify_token_output)
-	decode_verify_token_output[i][0] == true
+	decode_verify_token_output[i][_][0] == true
 }
 
 #
 # Check if token is valid by checking whether decoded_verify output exists or not
 #
 valid_token if {
-	decode_verify_token_output[_][0]
+	decode_verify_token_output[_][_][0]
 }
 
 #
 # Check trusted_researcher in the token payload
 #
 trusted_researcher if {
-	decode_verify_token_output[_][2].trusted_researcher == "true"
+	decode_verify_token_output[_][_][2].trusted_researcher == "true"
 }
 
 #
@@ -89,7 +89,7 @@ services := data.vault.external_services
 
 is_external_service[i] if {
 	some i in object.keys(services)
-#	services[i].user == decode_verify_token_output[_][2].CANDIG_USER_KEY
-	services[i].issuer == decode_verify_token_output[_][2].iss
-	services[i].client_id == decode_verify_token_output[_][2].azp
+#	services[i].user == decode_verify_token_output[_][_][2].CANDIG_USER_KEY
+	services[i].issuer == decode_verify_token_output[_][_][2].iss
+	services[i].client_id == decode_verify_token_output[_][_][2].azp
 }
