@@ -116,6 +116,7 @@ issuer := data.idp.user_info.iss
 
 user_is_candig_authorized if {
 	data.vault.user_auth.status_code == 200
+	data.vault.user_auth.body.data.userinfo.sample_jwt
 }
 
 else := false
