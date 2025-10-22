@@ -178,7 +178,7 @@ def setup_vault(user, site_roles, users, programs):
     user_read_auth = users[user]
     if "programs" in user_read_auth:
         vault["vault"]["user_programs"] = user_read_auth["programs"]
-        vault["vault"]["user_auth"] = {"status_code": 200}
+        vault["vault"]["user_auth"] = {"body": {"data": {"userinfo": {"sample_jwt": "something"}}}, "status_code": 200}
     else:
         vault["vault"]["user_programs"] = []
         vault["vault"]["user_auth"] = {"status_code": 403}
