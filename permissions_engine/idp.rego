@@ -40,7 +40,11 @@ user_info := decoded_output[1]
 #
 # The user's key, as determined by this candig instance
 #
-user_key := user_info.CANDIG_USER_KEY
+user_key := user_info.CANDIG_USER_KEY if {
+	user_info.CANDIG_USER_KEY
+}
+else := input.body.user_key
+
 
 #
 # If input.token is valid against an issuer, decode and verify
