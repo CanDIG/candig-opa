@@ -13,10 +13,9 @@ import rego.v1
 #
 # Function to decode and verify if a token is valid against a key
 #
-decode_verify_token(key, token) := output if {
+decode_verify_token(key, token, aud) := output if {
 	issuer := key.iss
 	cert := key.cert
-	aud := key.aud[_]
 	output := io.jwt.decode_verify(
 		token, # Decode and verify in one-step
 		{
@@ -41,16 +40,22 @@ user_info := decoded_output[1]
 #
 # The user's key, as determined by this candig instance
 #
-user_key := user_info.CANDIG_USER_KEY
+user_key := user_info.CANDIG_USER_KEY if {
+	user_info.CANDIG_USER_KEY
+}
+else := input.body.user_key
+
 
 #
-# If either input.identity or input.token are valid against an issuer, decode and verify
+# If input.token is valid against an issuer, decode and verify
 #
-decode_verify_token_output[issuer] := output if {
+decode_verify_token_output[issuer][aud] := output if {
 	possible_tokens := ["identity", "token"]
 	some i
 	issuer := keys[i].iss
-	output := decode_verify_token(keys[i], input[possible_tokens[_]])
+	some j
+	aud := keys[i].aud[j]
+	output := decode_verify_token(keys[i], input[possible_tokens[_]], aud)
 }
 
 #
@@ -58,21 +63,21 @@ decode_verify_token_output[issuer] := output if {
 #
 token_issuer := i if {
 	some i in object.keys(decode_verify_token_output)
-	decode_verify_token_output[i][0] == true
+	decode_verify_token_output[i][_][0] == true
 }
 
 #
 # Check if token is valid by checking whether decoded_verify output exists or not
 #
 valid_token if {
-	decode_verify_token_output[_][0]
+	decode_verify_token_output[_][_][0]
 }
 
 #
 # Check trusted_researcher in the token payload
 #
 trusted_researcher if {
-	decode_verify_token_output[_][2].trusted_researcher == "true"
+	decode_verify_token_output[_][_][2].trusted_researcher == "true"
 }
 
 #
@@ -80,4 +85,15 @@ trusted_researcher if {
 #
 is_local_token if {
 	keys[0].iss == token_issuer
+	user_info.azp == "KEYCLOAK_CLIENT_ID"
+}
+
+# we can tell if a token is from an external service if it matches the claims of a registered external service
+services := data.vault.external_services
+
+is_external_service[i] if {
+	some i in object.keys(services)
+#	services[i].user == decode_verify_token_output[_][_][2].CANDIG_USER_KEY
+	services[i].issuer == decode_verify_token_output[_][_][2].iss
+	services[i].client_id == decode_verify_token_output[_][_][2].azp
 }
