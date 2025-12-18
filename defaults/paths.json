@@ -2,8 +2,6 @@
     "paths": {
         "read": {
             "get": [
-                "/v3/discovery/?.*",
-                "/v3/authorized/?.*",
                 "/v1/datasets",
                 "/v1/datasets/?.*",
                 "/v1/datasets/?.*/info",
@@ -11,6 +9,8 @@
                 "/v1/datasets/?.*/persons",
                 "/v1/datasets/?.*/persons/?.*",
                 "/v1/beacon/datasets/?.*",
+                "/v3/discovery/?.*",
+                "/v3/authorized/?.*",
                 "/htsget/v1/variants/?.*",
                 "/htsget/v1/variants/search",
                 "/htsget/v1/reads/?.*",
@@ -38,18 +38,9 @@
                 "/v1/authz/site-role/?.*",
                 "/v1/authz/user/?.*",
                 "/ingest/?.*",
-                "/v3/discovery/?.*",
-                "/v3/authorized/?.*",
-                "/ga4gh/drs/v1/objects/?.*",
-                "/ga4gh/drs/v1/programs/?.*",
                 "/ga4gh/drs/v1/programs/?.*/status",
-                "/htsget/v1/variants/?.*",
-                "/htsget/v1/variants/search",
-                "/htsget/v1/reads/?.*",
-                "/htsget/v1/samples/?.*",
                 "/htsget/v1/?.*/index",
-                "/htsget/v1/?.*/verify",
-                "/beacon/v2/g_variants/?.*"
+                "/htsget/v1/?.*/verify"
             ],
             "post": [
                 "/v1/authz/program",
@@ -63,10 +54,7 @@
                 "/ingest/?.*",
                 "/v3/ingest/?.*",
                 "/v3/download/?.*",
-                "/ga4gh/drs/v1/?.*",
-                "/htsget/v1/variants/search",
-                "/htsget/v1/samples",
-                "/beacon/v2/g_variants"
+                "/ga4gh/drs/v1/?.*"
             ],
             "put": [
                 "/v1/datasets",
