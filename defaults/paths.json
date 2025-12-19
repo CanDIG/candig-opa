@@ -4,6 +4,13 @@
             "get": [
                 "/v3/discovery/?.*",
                 "/v3/authorized/?.*",
+                "/v1/datasets",
+                "/v1/datasets/?.*",
+                "/v1/datasets/?.*/info",
+                "/v1/datasets/?.*/statistics",
+                "/v1/datasets/?.*/persons",
+                "/v1/datasets/?.*/persons/?.*",
+                "/v1/beacon/datasets/?.*",
                 "/htsget/v1/variants/?.*",
                 "/htsget/v1/variants/search",
                 "/htsget/v1/reads/?.*",
@@ -14,46 +21,71 @@
                 "/beacon/v2/g_variants/?.*"
             ],
             "post": [
+                "/v1/beacon/?.*",
+                "/v3/download/?.*",
                 "/htsget/v1/variants/search",
                 "/htsget/v1/samples",
-                "/beacon/v2/g_variants",
-                "/v3/download/?.*"
+                "/beacon/v2/g_variants"
             ]
         },
         "curate": {
             "get": [
+                "/v1/authz/get-token",
+                "/v1/authz/program",
+                "/v1/authz/program/?.*",
+                "/v1/authz/program/?.*/dac_authorization",
+                "/v1/authz/s3-credential/?.*",
+                "/v1/authz/site-role/?.*",
+                "/v1/authz/user/?.*",
+                "/ingest/?.*",
                 "/v3/discovery/?.*",
                 "/v3/authorized/?.*",
+                "/ga4gh/drs/v1/objects/?.*",
+                "/ga4gh/drs/v1/programs/?.*",
+                "/ga4gh/drs/v1/programs/?.*/status",
                 "/htsget/v1/variants/?.*",
                 "/htsget/v1/variants/search",
                 "/htsget/v1/reads/?.*",
                 "/htsget/v1/samples/?.*",
-                "/ga4gh/drs/v1/objects/?.*",
-                "/ga4gh/drs/v1/programs/?.*",
-                "/ga4gh/drs/v1/programs/?.*/status",
-                "/beacon/v2/g_variants/?.*",
-                "/ingest/?.*",
                 "/htsget/v1/?.*/index",
-                "/htsget/v1/?.*/verify"
+                "/htsget/v1/?.*/verify",
+                "/beacon/v2/g_variants/?.*"
             ],
             "post": [
-                "/htsget/v1/variants/search",
-                "/htsget/v1/samples",
-                "/beacon/v2/g_variants",
+                "/v1/authz/program",
+                "/v1/authz/s3-credential",
+                "/v1/authz/site-role/?.*",
+                "/v1/authz/user/?.*",
+                "/v1/datasets/upload",
                 "/ingest/s3-credential/?.*",
                 "/ingest/program/?.*",
                 "/ingest/user/?.*",
                 "/ingest/?.*",
-                "/ga4gh/drs/v1/?.*",
                 "/v3/ingest/?.*",
-                "/v3/download/?.*"
+                "/v3/download/?.*",
+                "/ga4gh/drs/v1/?.*",
+                "/htsget/v1/variants/search",
+                "/htsget/v1/samples",
+                "/beacon/v2/g_variants"
+            ],
+            "put": [
+                "/v1/datasets",
+                "/v1/datasets/?.*"
+            ],
+            "patch": [
+                "/v1/datasets/?.*"
             ],
             "delete": [
+                "/v1/authz/program/?.*",
+                "/v1/authz/s3-credential/?.*",
+                "/v1/authz/site-role/?.*",
+                "/v1/authz/user/?.*",
+                "/v1/datasets/?.*",
                 "/ingest/s3-credential/?.*",
                 "/ingest/program/?.*",
                 "/ingest/user/?.*",
-                "/ga4gh/drs/v1/?.*",
-                "/v3/ingest/?.*"
+                "/v3/ingest/?.*",
+                "/ga4gh/drs/v1/?.*"
             ]
         }
     }
