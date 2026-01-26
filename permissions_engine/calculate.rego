@@ -119,6 +119,16 @@ else := accessible_programs if {
 
 else := accessible_programs if {
 	input.body.method = "GET"
+	regex.match(paths.read.get[_], input.body.path) == true
+}
+
+else := accessible_programs if {
+	input.body.method = "POST"
+	regex.match(paths.read.post[_], input.body.path) == true
+}
+
+else := accessible_programs if {
+	input.body.method = "GET"
 	regex.match(paths.curate.get[_], input.body.path) == true
 }
 
@@ -128,16 +138,16 @@ else := accessible_programs if {
 }
 
 else := accessible_programs if {
+	input.body.method = "PUT"
+	regex.match(paths.curate.put[_], input.body.path) == true
+}
+
+else := accessible_programs if {
+	input.body.method = "PATCH"
+	regex.match(paths.curate.patch[_], input.body.path) == true
+}
+
+else := accessible_programs if {
 	input.body.method = "DELETE"
 	regex.match(paths.curate.delete[_], input.body.path) == true
-}
-
-else := readable_programs if {
-	input.body.method = "GET"
-	regex.match(paths.read.get[_], input.body.path) == true
-}
-
-else := readable_programs if {
-	input.body.method = "POST"
-	regex.match(paths.read.post[_], input.body.path) == true
 }
