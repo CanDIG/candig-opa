@@ -23,7 +23,6 @@
             ],
             "post": [
                 "/v1/beacon/?.*",
-                "/v1/beacon/persons/?.*",
                 "/v3/download/?.*",
                 "/htsget/v1/variants/search",
                 "/htsget/v1/samples",
@@ -50,7 +49,6 @@
                 "/v1/authz/site-role/?.*",
                 "/v1/authz/user/?.*",
                 "/v1/datasets/upload",
-                "/v1/beacon/persons/?.*",
                 "/ingest/s3-credential/?.*",
                 "/ingest/program/?.*",
                 "/ingest/user/?.*",
