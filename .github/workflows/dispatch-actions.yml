@@ -1,41 +1,61 @@
 name: Submodule PR
+
 on:
-    pull_request:
-        branches: [develop]
-        types: [closed]
+  pull_request:
+    branches: [develop]
+    types: [closed]
+
 jobs:
-  CanDIG-dispatch:
+  submodule-dispatch:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        parent_repository:
+          - CanDIG/CanDIGv2
+          - CanDIG/CanDIGv3
+
     env:
-      PARENT_REPOSITORY: 'CanDIG/CanDIGv2'
-      CHECKOUT_BRANCH: 'develop'
-      PR_AGAINST_BRANCH: 'develop'
-      OWNER: 'CanDIG'
+      CHECKOUT_BRANCH: develop
+      PR_AGAINST_BRANCH: develop
+      OWNER: CanDIG
+
     steps:
-            - name: Check out repository code
-              uses: actions/checkout@v4
-            - name: get PR data
-              shell: python
-              run: |
-                  import json
-                  import os
-                  with open('${{ github.event_path }}') as fh:
-                      event = json.load(fh)
-                      escaped = event['pull_request']['title'].replace("'", '"')
-                      pr_number = event["number"]
-                      print(escaped)    
-                  with open(os.environ['GITHUB_ENV'], 'a') as fh:
-                      print(f'PR_TITLE={escaped}', file=fh)
-                      print(f'PR_NUMBER={pr_number}', file=fh)
-            - name: Create PR in CanDIGv2
-              id: make_pr
-              uses: CanDIG/github-action-pr-expanded@v4
-              with:
-                  github_token: ${{ secrets.SUBMODULE_PR }}
-                  parent_repository: ${{ env.PARENT_REPOSITORY }}
-                  checkout_branch: ${{ env.CHECKOUT_BRANCH}}
-                  pr_against_branch: ${{ env.PR_AGAINST_BRANCH }}
-                  pr_title: "${{ github.repository }} merging: ${{ env.PR_TITLE }}"
-                  pr_description: "PR triggered by update to develop branch on ${{ github.repository }}. Commit hash: `${{ github.sha }}`. PR link: [#${{ env.PR_NUMBER }}](https://github.com/${{ github.repository }}/pull/${{ env.PR_NUMBER }})"
-                  owner: ${{ env.OWNER }}
-                  submodule_path: lib/opa/opa
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Get PR data
+        shell: python3
+        run: |
+          import json
+          import os
+
+          with open(os.environ["GITHUB_EVENT_PATH"]) as fh:
+              event = json.load(fh)
+
+          pr_title = event["pull_request"]["title"]
+          pr_number = event["number"]
+
+          with open(os.environ["GITHUB_ENV"], "a") as fh:
+              print("PR_TITLE<<EOF", file=fh)
+              print(pr_title, file=fh)
+              print("EOF", file=fh)
+              print(f"PR_NUMBER={pr_number}", file=fh)
+
+      - name: Create PR in parent repository
+        uses: CanDIG/github-action-pr-expanded@v4
+        with:
+          github_token: ${{ secrets.SUBMODULE_PR }}
+          parent_repository: ${{ matrix.parent_repository }}
+          checkout_branch: ${{ env.CHECKOUT_BRANCH }}
+          pr_against_branch: ${{ env.PR_AGAINST_BRANCH }}
+          pr_title: "${{ github.repository }} merging: ${{ env.PR_TITLE }}"
+          pr_description: >
+            PR triggered by update to develop branch on
+            ${{ github.repository }}.
+            Commit hash: `${{ github.sha }}`.
+            PR link:
+            [#${{ env.PR_NUMBER }}](https://github.com/${{ github.repository }}/pull/${{ env.PR_NUMBER }})
+          owner: ${{ env.OWNER }}
+          submodule_path: lib/opa/opa
