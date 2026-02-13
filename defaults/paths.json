@@ -9,6 +9,7 @@
                 "/v1/datasets/?.*/persons",
                 "/v1/datasets/?.*/persons/?.*",
                 "/v1/beacon/datasets/?.*",
+                "/v1/beacon/persons/?.*",
                 "/v3/discovery/?.*",
                 "/v3/authorized/?.*",
                 "/htsget/v1/variants/?.*",
