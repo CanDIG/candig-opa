@@ -38,7 +38,9 @@
                 "/v1/authz/s3-credential/?.*",
                 "/v1/authz/site-role/?.*",
                 "/v1/authz/user/?.*",
-                "/ingest/?.*",
+                "/ingest/s3-credential/?.*",
+                "/ingest/program/?.*",
+                "/ingest/user/?.*",
                 "/ga4gh/drs/v1/programs/?.*/status",
                 "/htsget/v1/?.*/index",
                 "/htsget/v1/?.*/verify"
@@ -46,13 +48,11 @@
             "post": [
                 "/v1/authz/program",
                 "/v1/authz/s3-credential",
-                "/v1/authz/site-role/?.*",
                 "/v1/authz/user/?.*",
                 "/v1/datasets/upload",
                 "/ingest/s3-credential/?.*",
                 "/ingest/program/?.*",
                 "/ingest/user/?.*",
-                "/ingest/?.*",
                 "/v3/ingest/?.*",
                 "/v3/download/?.*",
                 "/ga4gh/drs/v1/?.*"
@@ -67,7 +67,6 @@
             "delete": [
                 "/v1/authz/program/?.*",
                 "/v1/authz/s3-credential/?.*",
-                "/v1/authz/site-role/?.*",
                 "/v1/authz/user/?.*",
                 "/v1/datasets/?.*",
                 "/ingest/s3-credential/?.*",
