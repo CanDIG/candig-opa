@@ -62,7 +62,8 @@
                 "/v1/datasets/?.*"
             ],
             "patch": [
-                "/v1/datasets/?.*"
+                "/v1/datasets/?.*",
+                "/v3/ingest/?.*"
             ],
             "delete": [
                 "/v1/authz/program/?.*",
